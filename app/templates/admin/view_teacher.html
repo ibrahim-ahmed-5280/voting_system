@@ -1,0 +1,181 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+<title>{% block title %}Admin | View teachers{% endblock %}</title>
+
+<!-- start page title -->
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="javascript: void(0);">voting system</a></li>
+          <li class="breadcrumb-item active">View Teachers</li>
+        </ol>
+      </div>
+      <h4 class="page-title">All teachers Details</h4>
+    </div>
+  </div>
+</div>
+<!-- end page title -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row mb-2">
+          <div class="col-sm-4">
+            <a href="{{url_for('register_teacher')}}" class="btn btn-dark mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add teacher</a>
+          </div>
+          <div class="col-sm-8">
+            <div class="text-sm-end">
+              <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog"></i></button>
+              <a href="#" class="btn btn-light mb-2" onclick="window.print()">Export</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Teacher Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Date of Birth</th>
+                <th>Guide Number</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- 30 static rows -->
+              <tr>
+                <td>HU0001</td><td>Abdirahman Mohamed Ibrahim</td><td>+252612345001</td><td>Mogadishu</td><td>2003-01-15</td><td>610001001</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0002</td><td>Ibrahim Ahmed Abdirahman</td><td>+252612345002</td><td>Mogadishu</td><td>2002-12-03</td><td>610001002</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0003</td><td>Mohamed Hassan Mohamed</td><td>+252612345003</td><td>Kismayo</td><td>2004-07-09</td><td>610001003</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0004</td><td>Musab Omar Abdulle</td><td>+252612345004</td><td>Baidoa</td><td>2003-03-22</td><td>610001004</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0005</td><td>Najma Abdulkadir Hussein</td><td>+252612345005</td><td>Mogadishu</td><td>2004-02-10</td><td>610001005</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0006</td><td>Ruweida Mohamed Hussein</td><td>+252612345006</td><td>Hargeisa</td><td>2003-05-18</td><td>610001006</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0007</td><td>Umulkheyr Abdi Mohamed</td><td>+252612345007</td><td>Mogadishu</td><td>2004-08-12</td><td>610001007</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0008</td><td>Yonis Abdulkadir Osman</td><td>+252612345008</td><td>Mogadishu</td><td>2002-09-25</td><td>610001008</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0009</td><td>Aisha Mohamed Hassan</td><td>+252612345009</td><td>Beledweyne</td><td>2004-01-28</td><td>610001009</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0010</td><td>Abdiaziz Ali Farah</td><td>+252612345010</td><td>Garowe</td><td>2003-04-05</td><td>610001010</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0011</td><td>Halima Hassan Mohamed</td><td>+252612345011</td><td>Mogadishu</td><td>2005-06-10</td><td>610001011</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0012</td><td>Mahad Abdi Ali</td><td>+252612345012</td><td>Baidoa</td><td>2003-07-09</td><td>610001012</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0013</td><td>Abdifitah Abdullahi Ahmed</td><td>+252612345013</td><td>Marka</td><td>2002-08-19</td><td>610001013</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0014</td><td>Abdullahi Mohamud Abdi</td><td>+252612345014</td><td>Jowhar</td><td>2004-10-02</td><td>610001014</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0015</td><td>Abdisamad Abdirizak Gutale</td><td>+252612345015</td><td>Hargeisa</td><td>2003-11-13</td><td>610001015</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0016</td><td>Faiza Ahmed Adam</td><td>+252612345016</td><td>Beledweyne</td><td>2005-02-11</td><td>610001016</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0017</td><td>Hawo Adan Wehliye</td><td>+252612345017</td><td>Mogadishu</td><td>2004-12-21</td><td>610001017</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0018</td><td>Taslim Dahir Gelle</td><td>+252612345018</td><td>Kismayo</td><td>2005-05-07</td><td>610001018</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0019</td><td>Abbas Abdulkadir Hassan</td><td>+252612345019</td><td>Mogadishu</td><td>2003-09-19</td><td>610001019</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0020</td><td>Hafsa Ali Hassan</td><td>+252612345020</td><td>Garowe</td><td>2004-06-24</td><td>610001020</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0021</td><td>Sudeysi Abdullahi Adam</td><td>+252612345021</td><td>Baidoa</td><td>2005-09-15</td><td>610001021</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0022</td><td>Abdikarim Mire Ahmed</td><td>+252612345022</td><td>Kismayo</td><td>2002-07-17</td><td>610001022</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0023</td><td>Abdirahman Ahmed Abdalle</td><td>+252612345023</td><td>Mogadishu</td><td>2003-03-03</td><td>610001023</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0024</td><td>Naima Abdirahman Abdow</td><td>+252612345024</td><td>Beledweyne</td><td>2004-04-04</td><td>610001024</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0025</td><td>Siham Abdisalan Ali</td><td>+252612345025</td><td>Mogadishu</td><td>2005-01-11</td><td>610001025</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0026</td><td>Anas Abdirashid Abdinor</td><td>+252612345026</td><td>Hargeisa</td><td>2003-06-14</td><td>610001026</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0027</td><td>Abdikadir Mohamed Ibrahim</td><td>+252612345027</td><td>Mogadishu</td><td>2002-08-19</td><td>610001027</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0028</td><td>Abdinasir Omar Hassan</td><td>+252612345028</td><td>Marka</td><td>2003-07-22</td><td>610001028</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0029</td><td>Abdirahman Aidarus Abdi</td><td>+252612345029</td><td>Mogadishu</td><td>2003-09-29</td><td>610001029</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+              <tr>
+                <td>HU0030</td><td>Abdiaziz Mohamed Ahmed</td><td>+252612345030</td><td>Garowe</td><td>2004-02-02</td><td>610001030</td>
+                <td><i class="mdi mdi-eye text-success"></i></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+{% endblock %}
