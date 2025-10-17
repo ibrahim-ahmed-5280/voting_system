@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>School voting | Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="votingSystem" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/icon.svg">
+
+    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/icons.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/app.min.css" rel="stylesheet"
+        type="text/css" id="light-style" />
+    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/app-dark.min.css"
+        rel="stylesheet" type="text/css" id="dark-style" />
+
+</head>
+
+<body class="loading authentication-bg"
+    data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
+    <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-4 col-lg-5">
+                    <div class="card">
+
+                        <!-- Logo -->
+                        <div class="card-header pt-4 pb-4 text-center bg-primary">
+                            <a href="index.html">
+                                <span><img src="{{url_for('static',filename = 'images/whiteLogo.svg')}}" alt=""
+                                        height="45"></span>
+                            </a>
+                        </div>
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center w-75 m-auto">
+                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
+                                <p class="text-muted mb-4">Enter your Student/Teacher ID and choose the role
+                                </p>
+                            </div>
+
+                            <form action="#" id="signin_form">
+
+                                <!-- Student or Teacher ID -->
+                                <div class="mb-3">
+                                    <label for="studentOrTeacherId" class="form-label">Student or Teacher ID</label>
+                                    <input class="form-control" id="studentOrTeacherId" required
+                                        placeholder="Enter your ID">
+                                    <span id="studentOrTeacherId_error" class="text-danger" style="opacity: 0;"></span>
+                                </div>
+                            
+                                <!-- Password -->
+                                <div class="mb-3">
+                                    <a href="pages-recoverpw.html" class="text-muted float-end"><small>Forgot your
+                                            password?</small></a>
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="password" class="form-control"
+                                            placeholder="Enter your password">
+                                        <div class="input-group-text" data-password="false">
+                                            <span class="password-eye"></span>
+                                        </div>
+                                    </div>
+                                    <span id="pass_error" class="text-danger" style="opacity: 0;">Invalid password</span>
+                                </div>
+                            
+                                <!-- Role Selection -->
+                                <div class="mb-3">
+                                    <label class="form-label d-block mb-2">Select Role</label>
+                                    <div class="btn-group w-100" role="group" aria-label="Role selection">
+                                        <input type="radio" class="btn-check" name="role" id="studentRole" value="student" autocomplete="off" checked>
+                                        <label class="btn btn-outline-primary" for="studentRole">Student</label>
+                            
+                                        <input type="radio" class="btn-check" name="role" id="teacherRole" value="teacher" autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="teacherRole">Teacher</label>
+                                    </div>
+                                    <span id="role_error" class="text-danger" style="opacity: 0;"></span>
+                                </div>
+                            
+                                <!-- Submit -->
+                                <div class="mb-3 mb-0 text-center">
+                                    <button class="btn btn-primary" type="button" onclick="login()">
+                                        <span class="spinner-border spinner-border-sm d-none" role="status"
+                                            aria-hidden="true" id="spinner"></span>
+                                        Log In
+                                    </button>
+                                </div>
+                            
+                            </form>
+                            
+                        </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <p class="text-muted">Don't have an account? <a
+                                    href="{{url_for('registration_admin_page')}}" class="text-muted ms-1"><b>Sign
+                                        Up</b></a></p>
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
+    </div>
+    <!-- end page -->
+
+    <footer class="footer footer-alt">
+        <div class="col-md-6">
+            <script>document.write(new Date().getFullYear())</script> © School voting system
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/app.min.js"></script>
+
+    <script src="{{url_for('static', filename = 'student/js/studentAndTeacherLogin.js')}}"></script>
+</body>
+
+</html>

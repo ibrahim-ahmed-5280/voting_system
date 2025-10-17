@@ -27,9 +27,9 @@ function login() {
     }
 
     // --- PASSWORD VALIDATION ---
-    if (!password || password.length < 6) {
+    if (!password || password.length < 4) {
         passError.style.opacity = 1;
-        passError.innerHTML = "Password must be at least 6 characters.";
+        passError.innerHTML = "Password must be at least 4 characters.";
         hasError = true;
     }
 
