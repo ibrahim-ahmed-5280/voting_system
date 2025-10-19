@@ -1,0 +1,289 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+<title>{% block title %}Admin | View candidates{% endblock %}</title>
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSchool</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">View candidates</a></li>
+                    <li class="breadcrumb-item active">View Candidates</li>
+                </ol>
+            </div>
+            <h4 class="page-title">View Candidates</h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <a href="{{url_for('register_candidates')}}" class="btn btn-dark mb-2"><i
+                                class="mdi mdi-plus-circle me-2"></i> Add candidate</a>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="text-sm-end">
+                            <button type="button" class="btn btn-primary mb-2 me-1"><i class="mdi mdi-cog"></i></button>
+                            <a href="#" class="btn btn-light mb-2" onclick="window.print()">Export</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-centered table-striped dt-responsive nowrap w-100"
+                        id="candidates-datatable">
+                        <thead>
+                            <tr>
+                                <th style="width: 20px;">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="customCheckCandidate">
+                                        <label class="form-check-label" for="customCheckCandidate">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th>ID</th>
+                                <th>Photo</th>
+                                <th>Candidate Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%if candidates_table%}
+                            {%for candidate in candidates_table%}
+                            <tr>
+                                <!-- Checkbox -->
+                                <td>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                            id="checkCandidate{{candidate.id}}">
+                                        <label class="form-check-label"
+                                            for="checkCandidate{{candidate.id}}">&nbsp;</label>
+                                    </div>
+                                </td>
+
+                                <!-- Candidate ID -->
+                                <td class="align-middle">{{ candidate.id }}</td>
+
+                                <!-- Candidate Photo -->
+                                <td class="align-middle">
+                                    <div style="width: 40px; height: 40px; overflow: hidden; border-radius: 50%;">
+                                        <img src="../../static/uploads/{{ candidate.photo }}" alt="candidate image"
+                                            style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+                                    </div>
+                                </td>
+
+                                <!-- Candidate Name -->
+                                <td class="align-middle">{{ candidate.name }}</td>
+
+                                <!-- Candidate Status Dropdown -->
+                                <td class="align-middle">
+                                    <div class="dropdown dropstart me-2">
+                                        <a href="#" class="action-icon view-icon d-flex align-items-start"
+                                            data-bs-toggle="dropdown">
+                                            {% if candidate.status in ['lost', 'rejected', 'withdrawn'] %}
+                                            <span class="badge bg-danger">{{ candidate.status }}</span>
+                                            {% elif candidate.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">{{ candidate.status }}</span>
+                                            {% elif candidate.status == 'elected' %}
+                                            <span class="badge bg-primary">{{ candidate.status }}</span>
+                                            {% elif candidate.status == 'approved' %}
+                                            <span class="badge bg-success">{{ candidate.status }}</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">{{ candidate.status }}</span>
+                                            {% endif %}
+                                        </a>
+
+                                        <!-- Dropdown Menu -->
+                                        <ul class="dropdown-menu p-3 shadow" style="min-width: 220px;"
+                                            data-bs-auto-close="outside">
+                                            <li>
+                                                <form onclick="event.stopPropagation()">
+                                                    <h6 class="mb-2">Change Candidate Status</h6>
+
+                                                    <div id="status_success_{{ candidate.id }}"
+                                                        class="text-success mt-1 small"></div>
+
+                                                    <select class="form-select mb-2"
+                                                        id="select_status_{{ candidate.id }}">
+                                                        <option value="{{ candidate.status }}" selected>{{
+                                                            candidate.status }}</option>
+                                                        {% for s in
+                                                        ['pending','approved','rejected','withdrawn','elected','lost']
+                                                        %}
+                                                        {% if candidate.status != s %}
+                                                        <option value="{{ s }}">{{ s|capitalize }}</option>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+
+                                                    <div id="status_error_{{ candidate.id }}"
+                                                        class="text-danger mt-1 small"></div>
+
+                                                    <div class="mt-2 d-grid">
+                                                        <button class="btn btn-primary btn-with-spinner" type="button"
+                                                            id="statusSubmitBtn_{{ candidate.id }}"
+                                                            onclick="submit_candidate_status_change('{{ candidate.id }}', event)">
+                                                            <span class="spinner-border spinner-border-sm d-none"
+                                                                id="statusSpinner_{{ candidate.id }}" role="status"
+                                                                aria-hidden="true"></span>
+                                                            <span class="button-text"
+                                                                id="statusText_{{ candidate.id }}">Submit</span>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+
+                                <!-- Actions Column -->
+                                <td class="align-middle">
+                                    <a href="#" class="action-icon" data-bs-toggle="modal"
+                                        data-bs-target="#updatecandidateModal{{ candidate.id }}">
+                                        <i class="mdi mdi-square-edit-outline"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- Modal: Update Candidate -->
+                            <div class="modal fade" id="updatecandidateModal{{ candidate.id }}" tabindex="-1"
+                                aria-labelledby="updatecandidateModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Update Candidate Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <form id="candidate_form{{ candidate.id }}" class="needs-validation"
+                                                novalidate>
+                                                <!-- Alerts -->
+                                                <div class="alert alert-success d-none" id="succ_msg{{ candidate.id }}">
+                                                    Candidate updated successfully!</div>
+                                                <div class="alert alert-danger d-none" id="err_msg{{ candidate.id }}">
+                                                    Something went wrong. Please try again.</div>
+
+                                                <!-- Form Fields -->
+                                                <div class="row">
+                                                    <div class="col-12 d-flex justify-content-center">
+                                                        {% if candidate.photo %}
+                                                        <div
+                                                            style="width: 80px; height: 80px; overflow: hidden; border-radius: 50%; margin-bottom: 10px;">
+                                                            <img src="{{ url_for('static', filename='uploads/' ~ candidate.photo) }}"
+                                                                alt="Current photo"
+                                                                style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <!-- Candidate Name -->
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <label for="name{{ candidate.id }}"
+                                                                class="form-label">Candidate Name <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input class="form-control" type="text"
+                                                                id="name{{ candidate.id }}"
+                                                                placeholder="Enter candidate name"
+                                                                value="{{ candidate.name }}" required>
+                                                            <div id="name_error{{ candidate.id }}"
+                                                                class="text-danger mt-1"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Candidate Photo -->
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <label for="photo{{ candidate.id }}"
+                                                                class="form-label">Candidate Photo <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input class="form-control" type="file"
+                                                                id="photo{{ candidate.id }}" accept="image/*">
+                                                            <div id="photo_error{{ candidate.id }}"
+                                                                class="text-danger mt-1"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Election -->
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <label for="election{{ candidate.id }}"
+                                                                class="form-label">Select Election <span
+                                                                    class="text-danger">*</span></label>
+                                                            <select class="form-select" id="election{{ candidate.id }}"
+                                                                required>
+                                                                <option value="">-- Select Election --</option>
+                                                                {% for election in elections_data %}
+                                                                <option value="{{ election.id }}" {% if
+                                                                    election.id==candidate.election_id %} selected {%
+                                                                    endif %}>
+                                                                    {{ election.election_name }}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            <div id="election_error{{ candidate.id }}"
+                                                                class="text-danger mt-1"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Statement -->
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                            <label for="statement{{ candidate.id }}"
+                                                                class="form-label">Candidate Statement <span
+                                                                    class="text-danger">*</span></label>
+                                                            <textarea class="form-control"
+                                                                id="statement{{ candidate.id }}"
+                                                                placeholder="Enter your campaign statement" rows="4"
+                                                                required>{{ candidate.statement }}</textarea>
+                                                            <div id="statement_error{{ candidate.id }}"
+                                                                class="text-danger mt-1"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Submit Button -->
+                                                <div class="text-end mt-3">
+                                                    <button id="submit_button{{ candidate.id }}" class="btn btn-primary"
+                                                        type="button" onclick="candidate_update('{{ candidate.id }}')">
+                                                        <span class="button-text">Submit Form</span>
+                                                        <span id="spinner{{ candidate.id }}"
+                                                            class="spinner-border spinner-border-sm d-none"></span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {%endfor%}
+                            {%else%}
+                            <tr>
+                                <td colspan="6" class="text-center">No candidates found</td>
+                            </tr>
+                            {%endif%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+<script src="{{url_for('static', filename='admin/js/view_candidates.js')}}"></script>
+<!-- Add this script block -->
+<script>
+  // Initialize DataTable when document is ready
+  document.addEventListener('DOMContentLoaded', function () {
+    $('#candidates-datatable').DataTable();
+  });
+</script>
+{% endblock %}

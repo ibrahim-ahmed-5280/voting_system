@@ -6,3 +6,10 @@ class DbConfiguration:
     EMAIL_PASS = 'zlblpnpvggwllnqm'
     FROM_EMAIL = 'albasrawie.cs.edu@gmail.com'
     TO_EMAIL = 'cabbaascadde55@gmail.com'
+
+
+# class DbConfiguration:
+#     DB_HOSTNAME = 'localhost'
+#     DB_USERNAME = 'root'
+#     DB_NAME = 'school_voting_db'
+#     DB_PASSWORD = 'ibrahim5280'

@@ -1,0 +1,112 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+<title>{% block title %}Admin | register candidate{% endblock %}</title>
+
+<!-- start page title -->
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSchool</a></li>
+          <li class="breadcrumb-item"><a href="javascript: void(0);">Registration</a></li>
+          <li class="breadcrumb-item active">Candidates</li>
+        </ol>
+      </div>
+      <h4 class="page-title">Candidates</h4>
+    </div>
+  </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card widget-flat">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <form id="candidate_form" class="needs-validation" novalidate>
+                            <!-- Success and Error Alerts -->
+                            <div class="alert alert-success d-none" role="alert" id="succ_msg">
+                                Candidate registered successfully!
+                            </div>
+                            <div class="alert alert-danger d-none" role="alert" id="err_msg">
+                                Something went wrong. Please try again.
+                            </div>
+
+                            <div class="row">
+                                <!-- Candidate Name -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Candidate Name <span
+                                                class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" placeholder="Enter candidate name"
+                                            id="name" required>
+                                        <div id="name_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Candidate Photo -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="photo" class="form-label">Candidate Photo <span
+                                                class="text-danger">*</span></label>
+                                        <input class="form-control" type="file" id="photo" accept="image/*" required>
+                                        <div id="photo_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Select Election -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="election" class="form-label">Select Election <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-select" id="election" required>
+                                            <option value="">-- Select Election --</option>
+                                            {% for election in elections_data %}
+                                            <option value="{{ election.id }}">{{ election.election_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <div id="election_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Candidate Statement -->
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="statement" class="form-label">Candidate Statement <span
+                                                class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="statement"
+                                            placeholder="Enter your campaign statement" rows="4" required></textarea>
+                                        <div id="statement_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-sm-12 text-sm-end">
+                                    <button id="submit_button" class="btn btn-primary" type="button"
+                                        onclick="candidate_registration()">
+                                        <span class="button-text">Submit Form</span>
+                                        <span id="spinner" class="spinner-border spinner-border-sm d-none"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div> <!-- end row-->
+
+
+
+
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+
+</div>
+<!-- end row -->
+<script src="{{url_for('static', filename = 'admin/js/register_candidates.js')}}"></script>
+{% endblock %}

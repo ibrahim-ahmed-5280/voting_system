@@ -8,11 +8,11 @@
     <div class="page-title-box">
       <div class="page-title-right">
         <ol class="breadcrumb m-0">
-          <li class="breadcrumb-item"><a href="javascript: void(0);">voting system</a></li>
+          <li class="breadcrumb-item"><a href="javascript: void(0);"  class="text-success">voting system</a></li>
           <li class="breadcrumb-item active">View Teachers</li>
         </ol>
       </div>
-      <h4 class="page-title">All teachers Details</h4>
+      <h4 class="page-title">All Teachers Details</h4>
     </div>
   </div>
 </div>
@@ -37,139 +37,178 @@
           <table id="basic-datatable" class="table dt-responsive nowrap w-100">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>No</th>
                 <th>Teacher Name</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Date of Birth</th>
-                <th>Guide Number</th>
+                <th>Teacher ID</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
+              {%if teachers_table%}
+              {%for teacher in teachers_table%}
+              <tr>
+                <td>{{teacher.id}}</td>
+                <td>{{teacher.name}}</td>
+                <td>{{teacher.teacher_id}}</td>
+                <td class="d-flex">
+                  <div class="dropdown dropstart">
+                    <div class="dropdown dropstart">
+                      <!-- Dropdown Toggle Button -->
+                      <a href="#" class="action-icon" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                      </a>
+                      <!-- Dropdown Menu (appears only when opened) -->
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href="#" class="dropdown-item" data-bs-toggle="modal"
+                            data-bs-target="#updateteacherModal{{ teacher.id }}" data-id="{{ teacher.id }}">
+                            <i class="mdi mdi-square-edit-outline me-1"></i> Edit Details
+                          </a>
+                        </li>
 
-              <!-- 30 static rows -->
-              <tr>
-                <td>HU0001</td><td>Abdirahman Mohamed Ibrahim</td><td>+252612345001</td><td>Mogadishu</td><td>2003-01-15</td><td>610001001</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0002</td><td>Ibrahim Ahmed Abdirahman</td><td>+252612345002</td><td>Mogadishu</td><td>2002-12-03</td><td>610001002</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0003</td><td>Mohamed Hassan Mohamed</td><td>+252612345003</td><td>Kismayo</td><td>2004-07-09</td><td>610001003</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0004</td><td>Musab Omar Abdulle</td><td>+252612345004</td><td>Baidoa</td><td>2003-03-22</td><td>610001004</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0005</td><td>Najma Abdulkadir Hussein</td><td>+252612345005</td><td>Mogadishu</td><td>2004-02-10</td><td>610001005</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0006</td><td>Ruweida Mohamed Hussein</td><td>+252612345006</td><td>Hargeisa</td><td>2003-05-18</td><td>610001006</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0007</td><td>Umulkheyr Abdi Mohamed</td><td>+252612345007</td><td>Mogadishu</td><td>2004-08-12</td><td>610001007</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0008</td><td>Yonis Abdulkadir Osman</td><td>+252612345008</td><td>Mogadishu</td><td>2002-09-25</td><td>610001008</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0009</td><td>Aisha Mohamed Hassan</td><td>+252612345009</td><td>Beledweyne</td><td>2004-01-28</td><td>610001009</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0010</td><td>Abdiaziz Ali Farah</td><td>+252612345010</td><td>Garowe</td><td>2003-04-05</td><td>610001010</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0011</td><td>Halima Hassan Mohamed</td><td>+252612345011</td><td>Mogadishu</td><td>2005-06-10</td><td>610001011</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0012</td><td>Mahad Abdi Ali</td><td>+252612345012</td><td>Baidoa</td><td>2003-07-09</td><td>610001012</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0013</td><td>Abdifitah Abdullahi Ahmed</td><td>+252612345013</td><td>Marka</td><td>2002-08-19</td><td>610001013</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0014</td><td>Abdullahi Mohamud Abdi</td><td>+252612345014</td><td>Jowhar</td><td>2004-10-02</td><td>610001014</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0015</td><td>Abdisamad Abdirizak Gutale</td><td>+252612345015</td><td>Hargeisa</td><td>2003-11-13</td><td>610001015</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0016</td><td>Faiza Ahmed Adam</td><td>+252612345016</td><td>Beledweyne</td><td>2005-02-11</td><td>610001016</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0017</td><td>Hawo Adan Wehliye</td><td>+252612345017</td><td>Mogadishu</td><td>2004-12-21</td><td>610001017</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0018</td><td>Taslim Dahir Gelle</td><td>+252612345018</td><td>Kismayo</td><td>2005-05-07</td><td>610001018</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0019</td><td>Abbas Abdulkadir Hassan</td><td>+252612345019</td><td>Mogadishu</td><td>2003-09-19</td><td>610001019</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0020</td><td>Hafsa Ali Hassan</td><td>+252612345020</td><td>Garowe</td><td>2004-06-24</td><td>610001020</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0021</td><td>Sudeysi Abdullahi Adam</td><td>+252612345021</td><td>Baidoa</td><td>2005-09-15</td><td>610001021</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0022</td><td>Abdikarim Mire Ahmed</td><td>+252612345022</td><td>Kismayo</td><td>2002-07-17</td><td>610001022</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0023</td><td>Abdirahman Ahmed Abdalle</td><td>+252612345023</td><td>Mogadishu</td><td>2003-03-03</td><td>610001023</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0024</td><td>Naima Abdirahman Abdow</td><td>+252612345024</td><td>Beledweyne</td><td>2004-04-04</td><td>610001024</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0025</td><td>Siham Abdisalan Ali</td><td>+252612345025</td><td>Mogadishu</td><td>2005-01-11</td><td>610001025</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0026</td><td>Anas Abdirashid Abdinor</td><td>+252612345026</td><td>Hargeisa</td><td>2003-06-14</td><td>610001026</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0027</td><td>Abdikadir Mohamed Ibrahim</td><td>+252612345027</td><td>Mogadishu</td><td>2002-08-19</td><td>610001027</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0028</td><td>Abdinasir Omar Hassan</td><td>+252612345028</td><td>Marka</td><td>2003-07-22</td><td>610001028</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0029</td><td>Abdirahman Aidarus Abdi</td><td>+252612345029</td><td>Mogadishu</td><td>2003-09-29</td><td>610001029</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
-              <tr>
-                <td>HU0030</td><td>Abdiaziz Mohamed Ahmed</td><td>+252612345030</td><td>Garowe</td><td>2004-02-02</td><td>610001030</td>
-                <td><i class="mdi mdi-eye text-success"></i></td>
-              </tr>
+                        <li>
+                          <a href="#" class="dropdown-item" data-bs-toggle="modal"
+                            data-bs-target="#updatePasswordModal{{ teacher.id }}" data-id="{{ teacher.id }}">
+                            <i class="mdi mdi-lock-outline me-1"></i> Change Password
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
 
+
+                  </div>
+                </td>
+                <!-- Modal for teacher details change -->
+                <div class="modal fade" id="updateteacherModal{{ teacher.id }}" tabindex="-1"
+                  aria-labelledby="updateteacherModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="updateteacherModalLabel">Update teacher details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="card-body">
+                        <form id="teacher_form{{teacher.id}}" class="needs-validation" novalidate>
+                          <div class="alert alert-success d-none" role="alert" id="succ_msg{{teacher.id}}">
+                            A simple success alert—check it out!
+                          </div>
+                          <div class="alert alert-danger d-none" role="alert" id="err_msg{{teacher.id}}">
+                            A simple danger alert—check it out!
+                          </div>
+                          <input type="hidden" id="id{{teacher.id}}" value="{{teacher.id}}">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="mb-3">
+                                <label for="name{{teacher.id}}" class="form-label">Full Name
+                                  <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" placeholder="Enter your full name"
+                                  id="name{{teacher.id}}" value="{{teacher.name}}" required />
+                                <div id="name_error{{teacher.id}}" class="text-danger mt-1"></div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-6">
+                              <div class="mb-3">
+                                <label for="teacher_id{{teacher.id}}" class="form-label">teacher ID
+                                  <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" id="teacher_id{{teacher.id}}"
+                                  placeholder="Enter teacher ID: 43556" value="{{teacher.teacher_id}}" required />
+                                <div id="teacher_id_error{{teacher.id}}" class="text-danger mt-1"></div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row mt-4">
+                            <div class="col-sm-12 text-sm-end">
+                              <button id="submit_button{{teacher.id}}" class="btn btn-success" type="button"
+                                onclick="teacher_registration(`{{teacher.id}}`)">
+                                <span class="button-text">Submit form</span>
+                                <span id="spinner{{teacher.id}}" class="spinner-border spinner-border-sm d-none"></span>
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- update password -->
+                <div class="modal fade" id="updatePasswordModal{{ teacher.id }}" tabindex="-1"
+                  aria-labelledby="updatePasswordModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="updatePasswordModalLabel">Update teacher details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="card-body">
+                        <form id="password_form{{teacher.id}}" class="needs-validation" novalidate>
+                          <div class="alert alert-success d-none" role="alert" id="succ_msg_pass{{teacher.id}}">
+                            A simple success alert—check it out!
+                          </div>
+                          <div class="alert alert-danger d-none" role="alert" id="err_msg_pass{{teacher.id}}">
+                            A simple danger alert—check it out!
+                          </div>
+                          <input type="hidden" id="id_pass{{teacher.id}}" value="{{teacher.id}}">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="mb-3">
+                                <label for="password{{teacher.id}}" class="form-label">New Password</label>
+                                <div class="input-group">
+                                  <input type="password" class="form-control p-2 rounded-start rounded-end-0"
+                                    id="password{{teacher.id}}" name="password{{teacher.id}}" required>
+                                  <button class="btn btn-light toggle-password shadow-none position-relative"
+                                    type="button" onclick="togglePasswordVisibility('password{{teacher.id}}', this)">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                  </button>
+                                </div>
+                                <div class="text-danger mt-1" id="passError{{teacher.id}}"></div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-6">
+                              <div class="mb-3">
+                                <label for="confirm_password{{teacher.id}}" class="form-label">Confirm New
+                                  Password</label>
+                                <div class="input-group">
+                                  <input type="password" class="form-control p-2 rounded-start rounded-end-0"
+                                    id="confirm_password{{teacher.id}}" name="confirm_password{{teacher.id}}" required>
+                                  <button class="btn btn-light toggle-password shadow-none position-relative"
+                                    type="button"
+                                    onclick="togglePasswordVisibility('confirm_password{{teacher.id}}', this)">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                  </button>
+                                </div>
+                                <div class="text-danger mt-1" id="ConfirmError{{teacher.id}}"></div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row mt-4">
+                            <div class="col-sm-12 text-sm-end">
+                              <button id="submit_button_pass{{teacher.id}}" class="btn btn-success" type="button"
+                                onclick="change_password_teacher(`{{teacher.id}}`)">
+                                <span class="button-text">Submit form</span>
+                                <span id="spinner_pass{{teacher.id}}" class="spinner-border spinner-border-sm d-none"></span>
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </tr>
+              {%endfor%}
+              {%else%}
+              <tr>
+                <th>No</th>
+                <th>teacher Name</th>
+                <th>teacher ID</th>
+                <th>Action</th>
+              </tr>
+              {%endif%}
             </tbody>
           </table>
         </div>
@@ -178,4 +217,6 @@
   </div>
 </div>
 <!-- end row -->
+
+<script src="{{url_for('static', filename='admin/js/view_teachers.js')}}"></script>
 {% endblock %}

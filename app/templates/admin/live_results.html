@@ -1,0 +1,245 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+<title>{% block title %}Admin | View Live Result{% endblock %}</title>
+
+<!-- start page title -->
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSchool</a></li>
+          <li class="breadcrumb-item"><a href="javascript: void(0);">View Live Results</a></li>
+          <li class="breadcrumb-item active">View Results</li>
+        </ol>
+      </div>
+      <h4 class="page-title">View Results</h4>
+    </div>
+  </div>
+</div>
+<!-- end page title -->
+
+<!-- Election Buttons -->
+<div class="d-flex justify-content-center flex-wrap gap-2 mb-4" id="electionButtons"></div>
+
+<!-- Chart -->
+<div class="row">
+    <div class="col-12" style="height: 300px;">
+        <canvas id="liveChart" style="width: 100%; height: 300px;"></canvas>
+        <div id="candidateImages" class="d-flex justify-content-around gap-2 mt-1"></div>
+    </div>
+</div>
+
+<!-- Summary Section -->
+<div class="row mt-5 bg-white">
+    <div class="col-12">
+        <div id="summary">
+            <h2 class="mb-4 text-center">Live Election Summary</h2>
+
+            <div class="row g-4">
+
+                <!-- Total Votes -->
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Votes</h5>
+                            <p class="card-text fs-3" id="total_votes">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Students Voted -->
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Students Voted</h5>
+                            <p class="card-text fs-3" id="total_students_voted">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Students Not Voted -->
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">Students Not Voted</h5>
+                            <p class="card-text fs-3 text-danger" id="total_students_not_voted">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Remaining -->
+                <div class="col-12">
+                    <div class="card text-center shadow-sm bg-warning text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title">Time Remaining</h5>
+                            <p class="card-text fs-3" id="time_remaining">00:00:00</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end summary -->
+
+<!-- JS Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    let currentElectionId = null;
+    let liveChart = null;
+    let previousChartData = '';
+
+    // Load all ongoing elections
+    async function loadElections() {
+        try {
+            const res = await fetch('/api/ongoing-elections');
+            const data = await res.json();
+
+            const container = document.getElementById('electionButtons');
+            container.innerHTML = '';
+
+            if (!data.success || data.elections.length === 0) {
+                container.innerHTML = '<p class="text-danger text-center">No ongoing elections.</p>';
+                return;
+            }
+
+            // Create buttons for each ongoing election
+            data.elections.forEach((election, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-outline-primary';
+                btn.textContent = election.election_name;
+                btn.onclick = () => selectElection(election.id, btn);
+
+                // Auto-select the first election
+                if (index === 0) {
+                    btn.classList.add('active');
+                    currentElectionId = election.id;
+                }
+
+                container.appendChild(btn);
+            });
+
+            // Initialize chart and data for first election
+            if (currentElectionId) {
+                initializeChart();
+                updateAll();
+            }
+        } catch (error) {
+            console.error('Error loading elections:', error);
+        }
+    }
+
+    // Handle election selection
+    function selectElection(id, btn) {
+        currentElectionId = id;
+
+        // Highlight active button
+        document.querySelectorAll('#electionButtons button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Refresh chart and summary
+        updateAll();
+    }
+
+    // Initialize chart
+    function initializeChart() {
+        const ctx = document.getElementById('liveChart').getContext('2d');
+        liveChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Votes',
+                    data: [],
+                    backgroundColor: 'rgba(31, 156, 75, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // Fetch and update chart data
+    async function updateLiveChart() {
+        if (!currentElectionId) return;
+
+        try {
+            const res = await fetch(`/api/live-results-chart?election_id=${currentElectionId}`);
+            const data = await res.json();
+
+            const currentData = JSON.stringify(data);
+            if (currentData === previousChartData) return; // no change
+            previousChartData = currentData;
+
+            // Update chart
+            liveChart.data.labels = data.map(c => c.candidate_name);
+            liveChart.data.datasets[0].data = data.map(c => c.votes);
+            liveChart.update('none');
+
+            // Update candidate images
+            const imagesContainer = document.getElementById('candidateImages');
+            imagesContainer.innerHTML = '';
+
+            data.forEach(c => {
+                const imgDiv = document.createElement('div');
+                imgDiv.style.width = '40px';
+                imgDiv.style.height = '40px';
+                imgDiv.style.borderRadius = '50%';
+                imgDiv.style.overflow = 'hidden';
+                imgDiv.style.border = '1px solid #ccc';
+
+                const img = document.createElement('img');
+                img.src = `../../static/uploads/${c.photo}`;  // photo field from backend
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+
+                imgDiv.appendChild(img);
+                imagesContainer.appendChild(imgDiv);
+            });
+
+        } catch (error) {
+            console.error('Error updating chart:', error);
+        }
+    }
+
+
+    // Fetch and update summary data
+    function updateLiveResults() {
+        if (!currentElectionId) return;
+
+        $.getJSON(`/api/live-summary/${currentElectionId}`, function (data) {
+            if (data.error) return console.error(data.error);
+
+            $('#total_votes').text(data.total_votes);
+            $('#total_students_voted').text(data.total_students_voted);
+            $('#total_students_not_voted').text(data.total_students_not_voted);
+            $('#time_remaining').text(data.time_remaining);
+        });
+    }
+
+    // Update chart and summary together
+    function updateAll() {
+        updateLiveChart();
+        updateLiveResults();
+    }
+
+    // Auto-refresh every 5 seconds
+    setInterval(updateAll, 5000);
+
+    // Load elections when page is ready
+    loadElections();
+</script>
+
+{% endblock %}

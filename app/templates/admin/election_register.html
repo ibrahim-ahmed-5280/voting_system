@@ -1,0 +1,109 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+<title>{% block title %}Admin | register election{% endblock %}</title>
+
+<!-- start page title -->
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSchool</a></li>
+          <li class="breadcrumb-item"><a href="javascript: void(0);">Registration</a></li>
+          <li class="breadcrumb-item active">Election</li>
+        </ol>
+      </div>
+      <h4 class="page-title">Election</h4>
+    </div>
+  </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card widget-flat">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <form id="election_form" class="needs-validation" novalidate>
+                            <div class="alert alert-success d-none" role="alert" id="succ_msg">
+                                A simple success alert—check it out!
+                            </div>
+                            <div class="alert alert-danger d-none" role="alert" id="err_msg">
+                                A simple danger alert—check it out!
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Election Name
+                                            <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" placeholder="Enter your election name"
+                                            id="name" name="name" required />
+                                        <div id="name_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="start_date" class="form-label">Election Start Date
+                                            <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="date" placeholder="Select start date"
+                                            id="start_date" name="start_date" required />
+                                        <div id="start_date_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="end_date" class="form-label">Election End Date
+                                            <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="date" placeholder="Select end date"
+                                            id="end_date" name="end_date" required />
+                                        <div id="end_date_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+                                <!-- election Photo -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="photo" class="form-label">Election Photo <span
+                                                class="text-danger">*</span></label>
+                                        <input class="form-control" type="file" id="photo" name="photo" accept="image/*" required>
+                                        <div id="photo_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="election_desc" class="form-label">ELection Decription
+                                            <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" type="text" id="election_desc" name="election_desc"
+                                            placeholder="Enter Decsription" required rows="4"></textarea>
+                                        <div id="election_desc_error" class="text-danger mt-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-sm-12 text-sm-end">
+                                    <button id="submit_button" class="btn btn-primary" type="button"
+                                        onclick="election_registration()">
+                                        <span class="button-text">Submit form</span>
+                                        <span id="spinner" class="spinner-border spinner-border-sm d-none"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div> <!-- end row-->
+
+
+
+
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+
+</div>
+<!-- end row -->
+<script src="{{url_for('static', filename = 'admin/js/register_election.js')}}"></script>
+{% endblock %}

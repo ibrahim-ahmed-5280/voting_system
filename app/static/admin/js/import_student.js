@@ -14,7 +14,7 @@ function import_students() {
 
 
     // Send request to Flask route `/view_excel`
-    fetch('/view_excel', {
+    fetch('/add_students_as_import', {
         method: 'POST',
         body: formData  // important: FormData handles file uploads
     })

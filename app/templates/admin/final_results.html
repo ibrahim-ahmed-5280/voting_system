@@ -1,0 +1,144 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+<title>{% block title %}Admin | View final result{% endblock %}</title>
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSchool</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Final Result</a></li>
+                    <li class="breadcrumb-item active">Final Result</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Final Result</h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-4 align-items-end">
+                    <!-- Filter Section -->
+                    <div class="col-sm-6">
+                        <label for="election-filter" class="form-label">Filter by Election:</label>
+                        <select id="election-filter" class="form-select">
+                            <option value="all">All Elections</option>
+                            {% if election_data %}
+                            {% for election in election_data %}
+                            <option value="{{ election.id }}">{{ election.election_name }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end mt-3 mt-sm-0">
+                            <button type="button" class="btn btn-primary me-1"><i class="mdi mdi-cog"></i></button>
+                            <a href="#" class="btn btn-light" onclick="window.print()">Export</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-centered table-striped dt-responsive nowrap w-100" id="results-datatable">
+                        <thead>
+                            <tr>
+                                <th style="width: 20px;">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="customCheckResult">
+                                        <label class="form-check-label" for="customCheckResult">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th>ID</th>
+                                <th>Candidate</th>
+                                <th>Election</th>
+                                <th>Total Votes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-body">
+                            {% if final_result %}
+                            {% for result in final_result %}
+                            <tr data-election-id="{{ result.election_id }}">
+                                <!-- Checkbox -->
+                                <td>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="checkResult{{result.id}}">
+                                        <label class="form-check-label" for="checkResult{{result.id}}">&nbsp;</label>
+                                    </div>
+                                </td>
+
+                                <td>{{ result.id }}</td>
+                                <td>{{ result.candidate_name }}</td>
+                                <td>{{ result.election_name }}</td>
+                                <td>{{ result.votes }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center">No results found</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const electionFilter = document.getElementById('election-filter');
+        const resultsBody = document.getElementById('results-body');
+        const allRows = Array.from(resultsBody.querySelectorAll('tr'));
+
+        function filterResults() {
+            const selectedElection = electionFilter.value;
+
+            allRows.forEach(row => {
+                const electionId = row.getAttribute('data-election-id');
+
+                if (selectedElection === 'all' || electionId === selectedElection) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Check if all rows are hidden
+            const visibleRows = allRows.filter(row => row.style.display !== 'none');
+            if (visibleRows.length === 0) {
+                // Show "no results" message
+                if (!resultsBody.querySelector('.no-results-message')) {
+                    const noResultsRow = document.createElement('tr');
+                    noResultsRow.className = 'no-results-message';
+                    noResultsRow.innerHTML = '<td colspan="4" class="text-center">No results found for the selected election</td>';
+                    resultsBody.appendChild(noResultsRow);
+                }
+            } else {
+                // Remove "no results" message if it exists
+                const noResultsMessage = resultsBody.querySelector('.no-results-message');
+                if (noResultsMessage) {
+                    noResultsMessage.remove();
+                }
+            }
+        }
+
+        // Event listener for election filter
+        electionFilter.addEventListener('change', filterResults);
+    });
+</script>
+
+<script>
+    // Initialize DataTable when document is ready
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#results-datatable').DataTable();
+    });
+</script>
+{% endblock %}

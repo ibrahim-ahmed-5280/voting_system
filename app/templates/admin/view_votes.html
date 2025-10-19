@@ -1,0 +1,148 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+<title>{% block title %}Admin | View view votes{% endblock %}</title>
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSchool</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">View Votes</a></li>
+                    <li class="breadcrumb-item active">View Votes</li>
+                </ol>
+            </div>
+            <h4 class="page-title">View Votes</h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Filter Section -->
+                <div class="row mb-4 align-items-end">
+                    <div class="col-sm-6">
+                        <label for="election-filter" class="form-label">Filter by Election:</label>
+                        <select id="election-filter" class="form-select">
+                            <option value="all">All Elections</option>
+                            {% if election_data %}
+                            {% for election in election_data %}
+                            <option value="{{ election.id }}">{{ election.election_name }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end mt-3 mt-sm-0">
+                            <button type="button" class="btn btn-primary me-1"><i class="mdi mdi-cog"></i></button>
+                            <a href="#" class="btn btn-light" onclick="window.print()">Export</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-centered table-striped dt-responsive nowrap w-100" id="votes-datatable">
+                        <thead>
+                            <tr>
+                                <th style="width: 20px;">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="customCheckVote">
+                                        <label class="form-check-label" for="customCheckVote">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th>ID</th>
+                                <th>Voter Name</th>
+                                <th>Voter Type</th>
+                                <th>Candidate</th>
+                                <th>Election</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="votes-body">
+                            {%if votes_data%}
+                            {%for voter in votes_data%}
+                            <tr data-election-id="{{ voter.election_id }}">
+                                <!-- Checkbox -->
+                                <td>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="checkVote{{voter.id}}">
+                                        <label class="form-check-label" for="checkVote{{voter.id}}">&nbsp;</label>
+                                    </div>
+                                </td>
+
+                                <td>{{ voter.id }}</td>
+                                <td>{{ voter.voter_name }}</td>
+                                <td>{{ voter.voter_type }}</td>
+                                <td>{{ voter.candidate_name }}</td>
+                                <td>{{ voter.election_name }}</td>
+                                <td>{{ voter.timestamp }}</td>
+                            </tr>
+                            {%endfor%}
+                            {%else%}
+                            <tr>
+                                <td colspan="7" class="text-center">No votes found</td>
+                            </tr>
+                            {%endif%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const electionFilter = document.getElementById('election-filter');
+        const votesBody = document.getElementById('votes-body');
+        const allRows = Array.from(votesBody.querySelectorAll('tr'));
+
+        function filterVotes() {
+            const selectedElection = electionFilter.value;
+
+            allRows.forEach(row => {
+                const electionId = row.getAttribute('data-election-id');
+
+                if (selectedElection === 'all' || electionId === selectedElection) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Check if all rows are hidden
+            const visibleRows = allRows.filter(row => row.style.display !== 'none');
+            if (visibleRows.length === 0) {
+                // Show "no results" message
+                if (!votesBody.querySelector('.no-votes-message')) {
+                    const noVotesRow = document.createElement('tr');
+                    noVotesRow.className = 'no-votes-message';
+                    noVotesRow.innerHTML = '<td colspan="6" class="text-center">No votes found for the selected election</td>';
+                    votesBody.appendChild(noVotesRow);
+                }
+            } else {
+                // Remove "no votes" message if it exists
+                const noVotesMessage = votesBody.querySelector('.no-votes-message');
+                if (noVotesMessage) {
+                    noVotesMessage.remove();
+                }
+            }
+        }
+
+        // Event listener for election filter
+        electionFilter.addEventListener('change', filterVotes);
+    });
+</script>
+
+<script>
+    // Initialize DataTable when document is ready
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#votes-datatable').DataTable();
+    });
+</script>
+{% endblock %}

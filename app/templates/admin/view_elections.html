@@ -1,0 +1,264 @@
+{% extends 'admin/admin_base.html' %}
+{% block content %}
+<title>{% block title %}Admin | View elections{% endblock %}</title>
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSchool</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">View ELections</a></li>
+                    <li class="breadcrumb-item active">Elections</li>
+                </ol>
+            </div>
+            <h4 class="page-title">View Elections</h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <a href="{{url_for('register_election')}}" class="btn btn-dark mb-2"><i
+                                class="mdi mdi-plus-circle me-2"></i> Add election</a>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="text-sm-end">
+                            <button type="button" class="btn btn-primary mb-2 me-1"><i class="mdi mdi-cog"></i></button>
+                            <a href="#" class="btn btn-light mb-2" onclick="window.print()">Export</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-centered table-striped dt-responsive nowrap w-100"
+                        id="elections-datatable">
+                        <thead>
+                            <tr>
+                                <th style="width: 20px;">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="customCheckElection">
+                                        <label class="form-check-label" for="customCheckElection">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th>ID</th>
+                                <th>Election</th>
+                                <th>Start date</th>
+                                <th>End date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if elections_table %}
+                            {% for election in elections_table %}
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                            id="checkElection{{election.id}}">
+                                        <label class="form-check-label"
+                                            for="checkElection{{election.id}}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>{{election.id}}</td>
+                                <td>{{election.election_name}}</td>
+                                <td>{{election.start_date}}</td>
+                                <td>{{election.end_date}}</td>
+                                <td>
+                                    <div class="dropdown dropstart me-2">
+                                        <a href="#" class="action-icon view-icon d-flex align-items-start"
+                                            data-bs-toggle="dropdown">
+                                            <span class="badge bg-primary">{{election.status}}</span>
+                                        </a>
+                                        <ul class="dropdown-menu p-2 shadow" style="min-width: 220px;"
+                                            data-bs-auto-close="outside">
+                                            <li>
+                                                <form onclick="event.stopPropagation()">
+                                                    <h5>Change Election Status</h5>
+                                                    <div id="status_success_{{election.id}}"
+                                                        class="text-success mt-1 small"></div>
+
+                                                    <select class="form-select" id="select_status_{{election.id}}">
+                                                        <option value="{{ election.status }}" selected>{{
+                                                            election.status }}</option>
+
+                                                        {% if election.status != 'upcoming' %}
+                                                        <option value="upcoming">Upcoming</option>
+                                                        {% endif %}
+
+                                                        {% if election.status != 'ongoing' %}
+                                                        <option value="ongoing">Ongoing</option>
+                                                        {% endif %}
+
+                                                        {% if election.status != 'completed' %}
+                                                        <option value="completed">Completed</option>
+                                                        {% endif %}
+                                                    </select>
+
+                                                    <div id="status_error_{{election.id}}"
+                                                        class="text-danger mt-1 small"></div>
+
+                                                    <div class="mt-3 d-grid">
+                                                        <button class="btn btn-primary btn-with-spinner" type="button"
+                                                            id="statusSubmitBtn_{{election.id}}"
+                                                            onclick="submit_election_status_change('{{election.id}}', event)">
+                                                            <span class="spinner-border spinner-border-sm d-none"
+                                                                id="statusSpinner_{{election.id}}" role="status"
+                                                                aria-hidden="true"></span>
+                                                            <span class="button-text"
+                                                                id="statusText_{{election.id}}">Submit</span>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="#" class="action-icon" data-bs-toggle="modal"
+                                        data-bs-target="#updateelectionModal{{ election.id }}">
+                                        <i class="mdi mdi-square-edit-outline"></i>
+                                    </a>
+                                </td>
+
+                                <!-- Modal for election details change -->
+                                <div class="modal fade" id="updateelectionModal{{ election.id }}" tabindex="-1"
+                                    aria-labelledby="updateelectionModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="updateelectionModalLabel">Update election
+                                                    details</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="card-body">
+                                                <form id="election_form{{election.id}}" class="needs-validation"
+                                                    novalidate>
+                                                    <div class="alert alert-success d-none" role="alert"
+                                                        id="succ_msg{{election.id}}">
+                                                        A simple success alert—check it out!
+                                                    </div>
+                                                    <div class="alert alert-danger d-none" role="alert"
+                                                        id="err_msg{{election.id}}">
+                                                        A simple danger alert—check it out!
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="name{{election.id}}"
+                                                                    class="form-label">Election Name
+                                                                    <span class="text-danger">*</span></label>
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Enter your election name"
+                                                                    id="name{{election.id}}" name="name"
+                                                                    value="{{election.election_name}}" required />
+                                                                <div id="name_error{{election.id}}"
+                                                                    class="text-danger mt-1"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="photo{{election.id}}"
+                                                                    class="form-label">Election Photo
+                                                                    <span class="text-danger">*</span></label>
+                                                                <input class="form-control" type="file"
+                                                                    id="photo{{election.id}}" name="photo"
+                                                                    accept="image/*" required>
+                                                                <div id="photo_error{{election.id}}"
+                                                                    class="text-danger mt-1"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="start_date{{election.id}}"
+                                                                    class="form-label">Election Start Date
+                                                                    <span class="text-danger">*</span></label>
+                                                                <input class="form-control" type="date"
+                                                                    placeholder="Select start date"
+                                                                    value="{{ election.start_date.strftime('%Y-%m-%d') if election.start_date else '' }}"
+                                                                    id="start_date{{election.id}}" name="start_date"
+                                                                    required />
+                                                                <div id="start_date_error{{election.id}}"
+                                                                    class="text-danger mt-1"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="end_date{{election.id}}"
+                                                                    class="form-label">Election End Date
+                                                                    <span class="text-danger">*</span></label>
+                                                                <input class="form-control" type="date"
+                                                                    placeholder="Select end date"
+                                                                    id="end_date{{election.id}}" name="end_date"
+                                                                    value="{{ election.end_date.strftime('%Y-%m-%d') if election.end_date else '' }}"
+                                                                    required />
+                                                                <div id="end_date_error{{election.id}}"
+                                                                    class="text-danger mt-1"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="mb-3">
+                                                                <label for="election_desc{{election.id}}"
+                                                                    class="form-label">ELection Decription
+                                                                    <span class="text-danger">*</span></label>
+                                                                <textarea class="form-control" type="text"
+                                                                    id="election_desc{{election.id}}"
+                                                                    placeholder="Enter Decsription" name="election_desc"
+                                                                    required>{{election.description }}</textarea>
+                                                                <div id="election_desc_error{{election.id}}"
+                                                                    class="text-danger mt-1"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mt-4">
+                                                        <div class="col-sm-12 text-sm-end">
+                                                            <button id="submit_button{{election.id}}"
+                                                                class="btn btn-primary" type="button"
+                                                                onclick="election_registration('{{election.id}}')">
+                                                                <span class="button-text">Submit form</span>
+                                                                <span id="spinner{{election.id}}"
+                                                                    class="spinner-border spinner-border-sm d-none"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center">No elections found</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+<script src="{{url_for('static', filename='admin/js/view_election.js')}}"></script>
+
+<!-- Add this script block -->
+<script>
+  // Initialize DataTable when document is ready
+  document.addEventListener('DOMContentLoaded', function () {
+    $('#elections-datatable').DataTable();
+  });
+</script>
+{% endblock %}

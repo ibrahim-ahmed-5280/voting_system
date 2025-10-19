@@ -3,18 +3,18 @@
 <title>{% block title %}Admin | Dashboard{% endblock %}</title>
 <!-- start page title -->
 <div class="row">
-    <div class="col-12">
-        <div class="page-title-box">
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSystem</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
-                </ol>
-            </div>
-            <h4 class="page-title">Dashboard</h4>
-        </div>
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="javascript: void(0);">VotingSchool</a></li>
+          <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </div>
+      <h4 class="page-title">Dashboard</h4>
     </div>
+  </div>
 </div>
 <!-- end page title -->
 
@@ -29,26 +29,38 @@
               <i class="mdi mdi-account-multiple widget-icon"></i>
             </div>
             <h5 class="text-muted fw-normal mt-0">Registered Students</h5>
-            <h3 class="mt-3 mb-3">1,254</h3>
+            <h3 class="mt-3 mb-3">{{ dashboard_data.registered_students.count }}</h3>
             <p class="mb-0 text-muted">
-              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.2%</span>
+              {% if dashboard_data.registered_students.direction == 'up' %}
+              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> {{
+                dashboard_data.registered_students.change }}%</span>
+              {% else %}
+              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> {{
+                dashboard_data.registered_students.change }}%</span>
+              {% endif %}
               <span class="text-nowrap">Since last month</span>
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Registered Teachers -->
+      <!-- Upcoming Elections -->
       <div class="col-lg-3">
         <div class="card widget-flat">
           <div class="card-body">
             <div class="float-end">
-              <i class="mdi mdi-teach widget-icon"></i>
+              <i class="mdi mdi-calendar-clock widget-icon"></i>
             </div>
-            <h5 class="text-muted fw-normal mt-0">Registered Teachers</h5>
-            <h3 class="mt-3 mb-3">128</h3>
+            <h5 class="text-muted fw-normal mt-0">Upcoming Elections</h5>
+            <h3 class="mt-3 mb-3">{{ dashboard_data.upcoming_elections.count }}</h3>
             <p class="mb-0 text-muted">
-              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 2.8%</span>
+              {% if dashboard_data.upcoming_elections.direction == 'up' %}
+              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> {{
+                dashboard_data.upcoming_elections.change }}%</span>
+              {% else %}
+              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> {{
+                dashboard_data.upcoming_elections.change }}%</span>
+              {% endif %}
               <span class="text-nowrap">Since last month</span>
             </p>
           </div>
@@ -63,10 +75,16 @@
               <i class="mdi mdi-ballot-recount widget-icon"></i>
             </div>
             <h5 class="text-muted fw-normal mt-0">Total Votes Submitted</h5>
-            <h3 class="mt-3 mb-3">842</h3>
+            <h3 class="mt-3 mb-3">{{ dashboard_data.total_votes.count }}</h3>
             <p class="mb-0 text-muted">
-              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.3%</span>
-              <span class="text-nowrap">Since last month</span>
+              {% if dashboard_data.total_votes.direction == 'up' %}
+              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> {{ dashboard_data.total_votes.change
+                }}%</span>
+              {% else %}
+              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> {{
+                dashboard_data.total_votes.change }}%</span>
+              {% endif %}
+              <span class="text-nowrap">Since last week</span>
             </p>
           </div>
         </div>
@@ -80,19 +98,26 @@
               <i class="mdi mdi-vote-outline widget-icon"></i>
             </div>
             <h5 class="text-muted fw-normal mt-0">Active Elections</h5>
-            <h3 class="mt-3 mb-3">3</h3>
+            <h3 class="mt-3 mb-3">{{ dashboard_data.active_elections.count }}</h3>
             <p class="mb-0 text-muted">
-              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 12.4%</span>
+              {% if dashboard_data.active_elections.direction == 'up' %}
+              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> {{
+                dashboard_data.active_elections.change }}%</span>
+              {% else %}
+              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> {{
+                dashboard_data.active_elections.change }}%</span>
+              {% endif %}
               <span class="text-nowrap">Since last month</span>
             </p>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- SECOND ROW -->
+  <div class="col-lg-12">
     <div class="row">
-      <!-- Complaints Received -->
+      <!-- All Elections -->
       <div class="col-lg-3">
         <div class="card widget-flat">
           <div class="card-body">
@@ -100,9 +125,15 @@
               <i class="mdi mdi-account-star widget-icon"></i>
             </div>
             <h5 class="text-muted fw-normal mt-0">All Elections</h5>
-            <h3 class="mt-3 mb-3">47</h3>
+            <h3 class="mt-3 mb-3">{{ dashboard_data.all_elections.count }}</h3>
             <p class="mb-0 text-muted">
-              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 3.4%</span>
+              {% if dashboard_data.all_elections.direction == 'up' %}
+              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> {{
+                dashboard_data.all_elections.change }}%</span>
+              {% else %}
+              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> {{
+                dashboard_data.all_elections.change }}%</span>
+              {% endif %}
               <span class="text-nowrap">Since last month</span>
             </p>
           </div>
@@ -117,16 +148,22 @@
               <i class="mdi mdi-account-check-outline widget-icon"></i>
             </div>
             <h5 class="text-muted fw-normal mt-0">Approved Candidates</h5>
-            <h3 class="mt-3 mb-3">58</h3>
+            <h3 class="mt-3 mb-3">{{ dashboard_data.approved_candidates.count }}</h3>
             <p class="mb-0 text-muted">
-              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 8.1%</span>
+              {% if dashboard_data.approved_candidates.direction == 'up' %}
+              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> {{
+                dashboard_data.approved_candidates.change }}%</span>
+              {% else %}
+              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> {{
+                dashboard_data.approved_candidates.change }}%</span>
+              {% endif %}
               <span class="text-nowrap">Since last month</span>
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Pending Requests -->
+      <!-- Pending Candidates -->
       <div class="col-lg-3">
         <div class="card widget-flat">
           <div class="card-body">
@@ -134,9 +171,15 @@
               <i class="mdi mdi-clock-outline widget-icon"></i>
             </div>
             <h5 class="text-muted fw-normal mt-0">Pending Candidates</h5>
-            <h3 class="mt-3 mb-3">19</h3>
+            <h3 class="mt-3 mb-3">{{ dashboard_data.pending_candidates.count }}</h3>
             <p class="mb-0 text-muted">
-              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 2.0%</span>
+              {% if dashboard_data.pending_candidates.direction == 'up' %}
+              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> {{
+                dashboard_data.pending_candidates.change }}%</span>
+              {% else %}
+              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> {{
+                dashboard_data.pending_candidates.change }}%</span>
+              {% endif %}
               <span class="text-nowrap">Since last month</span>
             </p>
           </div>
@@ -151,9 +194,15 @@
               <i class="mdi mdi-account-group widget-icon"></i>
             </div>
             <h5 class="text-muted fw-normal mt-0">System Users</h5>
-            <h3 class="mt-3 mb-3">1,402</h3>
+            <h3 class="mt-3 mb-3">{{ dashboard_data.system_users.count }}</h3>
             <p class="mb-0 text-muted">
-              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 6.0%</span>
+              {% if dashboard_data.system_users.direction == 'up' %}
+              <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> {{
+                dashboard_data.system_users.change }}%</span>
+              {% else %}
+              <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> {{
+                dashboard_data.system_users.change }}%</span>
+              {% endif %}
               <span class="text-nowrap">Since last month</span>
             </p>
           </div>
@@ -164,5 +213,6 @@
 </div>
 
 <!-- end row -->
+
 
 {% endblock %}

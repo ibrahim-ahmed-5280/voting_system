@@ -8,9 +8,9 @@
         <div class="page-title-box">
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">votingSystem</a>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);"  class="text-success">votingSystem</a>
                     </li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Registeration</a>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);"  class="text-success">Registeration</a>
                     </li>
                     <li class="breadcrumb-item active">Teachers</li>
                 </ol>
@@ -28,9 +28,14 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
+                        <form id="teacher_form" class="needs-validation" novalidate>
+                            <div class="alert alert-success d-none" role="alert" id="succ_msg">
+                                A simple success alert—check it out!
+                            </div>
+                            <div class="alert alert-danger d-none" role="alert" id="err_msg">
+                                A simple danger alert—check it out!
+                            </div>
 
-
-                        <form class="needs-validation" novalidate>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -38,87 +43,83 @@
                                             <span class="text-danger">*</span></label>
                                         <input class="form-control" type="text" placeholder="Enter your full name"
                                             id="name" required />
-                                        <div class="invalid-feedback">
-                                            Please Enter Your Name.
-                                        </div>
+                                        <div id="name_error" class="text-danger mt-1"></div>
                                     </div>
                                 </div>
-
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="teacher_id" class="form-label">teacher Id
+                                        <label for="teacher_id" class="form-label">teacher ID
                                             <span class="text-danger">*</span></label>
                                         <input class="form-control" type="text" id="teacher_id"
-                                            placeholder="Enter teacher Id : 43556" required />
-                                        <div class="invalid-feedback">
-                                            Please Enter teacher Id.
-                                        </div>
+                                            placeholder="Enter teacher ID: 43556" required />
+                                        <div id="teacher_id_error" class="text-danger mt-1"></div>
                                     </div>
                                 </div>
-
-
-
-
-                            </div> <!-- end row -->
-
-                    </div> <!-- end row -->
-                    <div class="row mt-4">
-                        <div class="col-sm-12">
-                            <div class="text-sm-end">
-                                <button class="btn btn-primary" type="submit">Submit form</button>
                             </div>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
 
-                    </form>
-                </div>
-
-            </div> <!-- end row-->
-
-
-
-
-        </div> <!-- end card-body-->
-    </div> <!-- end card-->
-</div> <!-- end col -->
-
-<div class="row">
-    <div class="col-lg-12">
-        <p class="fs-4 fw-bold">Add teachers as import excel file</p>
-        <div class="card widget-flat">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-12">
-
-                        <!-- Import Students Form -->
-                        <form class="needs-validation" novalidate enctype="multipart/form-data">
-                            <div class="row g-3">
-                                <!-- File Input -->
-                                <div class="col-md-6 d-flex align-items-center">
-                                    <div class="input-group w-100">
-                                        <span class="input-group-text"><i class="mdi mdi-attachment"></i></span>
-                                        <input type="file" class="form-control" id="import-file"
-                                            accept=".xlsx, .xls, .csv" required>
-                                    </div>
-                                </div>
-
-                                <!-- Submit Button -->
-                                <div class="col-md-6 d-flex align-items-center">
-                                    <button class="btn btn-success w-100" type="submit">
-                                        <i class="mdi mdi-upload"></i> Import teachers
+                            <div class="row mt-4">
+                                <div class="col-sm-12 text-sm-end">
+                                    <button id="submit_button" class="btn btn-success" type="button"
+                                        onclick="teacher_registration()">
+                                        <span class="button-text">Submit form</span>
+                                        <span id="spinner" class="spinner-border spinner-border-sm d-none"></span>
                                     </button>
                                 </div>
                             </div>
-
-
                         </form>
-
-                    </div> <!-- end col -->
+                    </div>
                 </div> <!-- end row-->
+
             </div> <!-- end card-body-->
         </div> <!-- end card-->
     </div> <!-- end col -->
-</div>
-<!-- end row -->
-{% endblock %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <p class="fs-4 fw-bold">Add teachers as import excel file</p>
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <!-- Import teachers Form -->
+                            <form class="needs-validation" novalidate enctype="multipart/form-data" id="import_form">
+                                <div class="row g-3">
+                                    <div class="alert alert-success d-none" role="alert" id="succ_msg_import">
+                                        A simple success alert—check it out!
+                                    </div>
+                                    <div class="alert alert-danger d-none" role="alert" id="err_msg_import">
+                                        A simple danger alert—check it out!
+                                    </div>
+
+                                    <!-- File Input -->
+                                    <div class="col-md-6 d-flex align-items-center">
+                                        <div class="input-group w-100">
+                                            <span class="input-group-text"><i class="mdi mdi-attachment"></i></span>
+                                            <input type="file" class="form-control" id="import-file"
+                                                accept=".xlsx, .xls, .csv" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="col-md-6 d-flex align-items-center">
+                                        <button class="btn btn-success w-100" type="button" onclick="import_teachers()">
+                                            <span class="button-text">Import teachers</span>
+                                            <i class="mdi mdi-upload" id="icon-uplooad"></i>
+                                            <span id="spinner" class="spinner-border spinner-border-sm d-none"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+                        </div> <!-- end col -->
+                    </div> <!-- end row-->
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <script src="{{url_for('static', filename = 'admin/js/teacher_registration.js')}}"></script>
+    {% endblock %}

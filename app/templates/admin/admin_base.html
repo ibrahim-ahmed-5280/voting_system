@@ -6,34 +6,28 @@
     <title>{% block title %}Voting System{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-    <meta content="votingSystem" name="author" />
+    <meta content="SomaliRealEState" name="author" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="../../static/images/logo.png">
     <!-- third party css -->
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/vendor/dataTables.bootstrap5.css"
-        rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/vendor/responsive.bootstrap5.css"
-        rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/vendor/buttons.bootstrap5.css"
-        rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/vendor/select.bootstrap5.css"
-        rel="stylesheet" type="text/css" />
+    <link href="../../static/assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
     <!-- third party css end -->
 
     <!-- App css -->
-
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/icons.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/app.min.css" rel="stylesheet"
-        type="text/css" id="light-style" />
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/app-dark.min.css"
-        rel="stylesheet" type="text/css" id="dark-style" />
+    <link href="../../static/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../static/assets/css/app.min.css" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="../../static/assets/css/app-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" />
 
 
-    <!-- fon awesome cdn link for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../../static/assets/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
+    <link href="../../static/assets/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css" />
+    <!-- third party css end -->
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- google icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
 
 
 
@@ -63,20 +57,20 @@
             <!-- LOGO -->
             <a href="{{url_for('dashboard_admin')}}" class="logo text-center logo-light">
                 <span class="logo-lg">
-                    <img src="assets/images/logo.png" alt="" height="40">
+                    <img src="../../static/images/logo.png" alt="" height="50">
                 </span>
                 <span class="logo-sm">
-                    <img src="assets/images/logo3.png" alt="" height="16">
+                    <img src="../../static/images/logo3.png" alt="" height="30">
                 </span>
             </a>
 
             <!-- LOGO -->
-            <a href="{{url_for('dashboard_admin')}}" class="logo text-center logo-dark">
+            <a href="index.html" class="logo text-center logo-dark">
                 <span class="logo-lg">
-                    <img src="assets/images/dark_logo.png" alt="" height="40">
+                    <img src="../../static/images/dark_logo.png" alt="" height="50">
                 </span>
                 <span class="logo-sm">
-                    <img src="assets/images/dark_logo2.png" alt="" height="16">
+                    <img src="../../static/images/dark_logo2.png" alt="" height="30">
                 </span>
             </a>
 
@@ -117,7 +111,7 @@
                     </li>
 
                     <!-- 3️⃣ Teachers -->
-                    <li class="side-nav-item">
+                    <!-- <li class="side-nav-item d-none">
                         <a data-bs-toggle="collapse" href="#sidebarTeachers" aria-expanded="false"
                             aria-controls="sidebarTeachers" class="side-nav-link">
                             <i class="fa-solid fa-chalkboard-user fs-5"></i>
@@ -135,7 +129,7 @@
 
                             </ul>
                         </div>
-                    </li>
+                    </li> -->
 
                     <!-- 4️⃣ Elections -->
                     <li class="side-nav-item">
@@ -148,10 +142,10 @@
                         <div class="collapse" id="sidebarElections">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="create-election.html">Create Election</a>
+                                    <a href="{{url_for('register_election')}}">Create Election</a>
                                 </li>
                                 <li>
-                                    <a href="view-elections.html">View Elections</a>
+                                    <a href="{{url_for('view_election')}}">View Elections</a>
                                 </li>
                             </ul>
                         </div>
@@ -168,10 +162,10 @@
                         <div class="collapse" id="sidebarCandidates">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="register-candidate.html">Register Candidate</a>
+                                    <a href="{{url_for('register_candidates')}}">Register Candidate</a>
                                 </li>
                                 <li>
-                                    <a href="view-candidates.html">View Candidates</a>
+                                    <a href="{{url_for('view_candidates')}}">View Candidates</a>
                                 </li>
                             </ul>
                         </div>
@@ -188,17 +182,20 @@
                         <div class="collapse" id="sidebarVotes">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="live-results.html">Live Results</a>
+                                    <a href="{{url_for('live_results_page')}}">Live Results</a>
                                 </li>
                                 <li>
-                                    <a href="view-votes.html">View Votes</a>
+                                    <a href="{{url_for('view_votes_page')}}">View Votes</a>
                                 </li>
                                 <li>
-                                    <a href="final-results.html">Final Results</a>
+                                    <a href="{{url_for('final_results_page')}}">Final Results</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
+
+
+
 
                     <!-- 7️⃣ Logout -->
                     <li class="side-nav-item">
@@ -207,9 +204,7 @@
                             <span> Logout </span>
                         </a>
                     </li>
-
                 </ul>
-                <!-- End Sidebar -->
 
 
 
@@ -241,156 +236,6 @@
                             </div>
                         </li>
 
-
-                        <li class="dropdown notification-list">
-                            <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#"
-                                role="button" aria-haspopup="false" aria-expanded="false">
-                                <i class="dripicons-bell noti-icon"></i>
-                                <span class="noti-icon-badge"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg">
-
-                                <!-- item-->
-                                <div class="dropdown-item noti-title">
-                                    <h5 class="m-0">
-                                        <span class="float-end">
-                                            <a href="javascript: void(0);" class="text-dark">
-                                                <small>Clear All</small>
-                                            </a>
-                                        </span>Notification
-                                    </h5>
-                                </div>
-
-                                <div style="max-height: 230px;" data-simplebar>
-                                    <!-- item-->
-                                    <a href="pages-profile.html" class="dropdown-item notify-item">
-                                        <div class="notify-icon bg-primary">
-                                            <i class="mdi mdi-comment-account-outline"></i>
-                                        </div>
-                                        <p class="notify-details">Caleb Flakelar commented on Admin
-                                            <small class="text-muted">1 min ago</small>
-                                        </p>
-                                    </a>
-
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                        <div class="notify-icon bg-info">
-                                            <i class="mdi mdi-account-plus"></i>
-                                        </div>
-                                        <p class="notify-details">New user registered.
-                                            <small class="text-muted">5 hours ago</small>
-                                        </p>
-                                    </a>
-
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                        <div class="notify-icon">
-                                            <img src="assets/images/users/avatar-2.jpg" class="img-fluid rounded-circle"
-                                                alt="" />
-                                        </div>
-                                        <p class="notify-details">Cristina Pride</p>
-                                        <p class="text-muted mb-0 user-msg">
-                                            <small>Hi, How are you? What about our next meeting</small>
-                                        </p>
-                                    </a>
-
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                        <div class="notify-icon bg-primary">
-                                            <i class="mdi mdi-comment-account-outline"></i>
-                                        </div>
-                                        <p class="notify-details">Caleb Flakelar commented on Admin
-                                            <small class="text-muted">4 days ago</small>
-                                        </p>
-                                    </a>
-
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                        <div class="notify-icon">
-                                            <img src="assets/images/users/avatar-4.jpg" class="img-fluid rounded-circle"
-                                                alt="" />
-                                        </div>
-                                        <p class="notify-details">Karen Robinson</p>
-                                        <p class="text-muted mb-0 user-msg">
-                                            <small>Wow ! this admin looks good and awesome design</small>
-                                        </p>
-                                    </a>
-
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                        <div class="notify-icon bg-info">
-                                            <i class="mdi mdi-heart"></i>
-                                        </div>
-                                        <p class="notify-details">Carlos Crouch liked
-                                            <b>Admin</b>
-                                            <small class="text-muted">13 days ago</small>
-                                        </p>
-                                    </a>
-                                </div>
-
-                                <!-- All-->
-                                <a href="javascript:void(0);"
-                                    class="dropdown-item text-center text-primary notify-item notify-all">
-                                    View All
-                                </a>
-
-                            </div>
-                        </li>
-
-                        <li class="dropdown notification-list d-none d-sm-inline-block">
-                            <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#"
-                                role="button" aria-haspopup="false" aria-expanded="false">
-                                <i class="dripicons-view-apps noti-icon"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg p-0">
-
-                                <div class="p-2">
-                                    <div class="row g-0">
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/slack.png" alt="slack">
-                                                <span>Slack</span>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/github.png" alt="Github">
-                                                <span>GitHub</span>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/dribbble.png" alt="dribbble">
-                                                <span>Dribbble</span>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="row g-0">
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/bitbucket.png" alt="bitbucket">
-                                                <span>Bitbucket</span>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/dropbox.png" alt="dropbox">
-                                                <span>Dropbox</span>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/g-suite.png" alt="G Suite">
-                                                <span>G Suite</span>
-                                            </a>
-                                        </div>
-                                    </div> <!-- end row-->
-                                </div>
-
-                            </div>
-                        </li>
-
                         <li class="notification-list">
                             <a class="nav-link end-bar-toggle" href="javascript: void(0);">
                                 <i class="dripicons-gear noti-icon"></i>
@@ -401,11 +246,17 @@
                             <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown"
                                 href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <span class="account-user-avatar">
-                                    <img src="assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+                                    <div class="bg-primary rounded-pill d-flex align-items-center justify-content-center"
+                                        style="width: 35px; height: 35px;">
+                                        <span class="text-white text-uppercase">{{ admin.name.split(' ')[0][0] ~
+                                            admin.name.split(' ')[1][0] }}</span>
+                                    </div>
                                 </span>
                                 <span>
-                                    <span class="account-user-name">Abdisalan Abdukadir</span>
-                                    <span class="account-position">Founder</span>
+                                    <span class="account-user-name text-capitalize">{{ admin.name.split(' ')[0] ~ ' ' ~
+                                        admin.name.split(' ')[1] }}
+                                    </span>
+                                    <span class="account-position">Admin</span>
                                 </span>
                             </a>
                             <div
@@ -416,20 +267,20 @@
                                 </div>
 
                                 <!-- item-->
-                                <a href="pages-profile.html" class="dropdown-item notify-item">
+                                <a href="{{url_for('profile_admin')}}" class="dropdown-item notify-item">
                                     <i class="mdi mdi-account-circle me-1"></i>
                                     <span>My Account</span>
                                 </a>
 
                                 <!-- item-->
-                                <a href="pages-recoverpw.html" class="dropdown-item notify-item">
+                                <a href="#changePasswordModal" class="dropdown-item notify-item" data-bs-toggle="modal"
+                                    data-bs-target="#changePasswordModal">
                                     <i class="mdi mdi-account-edit me-1"></i>
                                     <span>Change Password</span>
                                 </a>
 
-
                                 <!-- item-->
-                                <a href="pages-logout.html" class="dropdown-item notify-item">
+                                <a href="{{url_for('logout_admin')}}" class="dropdown-item notify-item">
                                     <i class="mdi mdi-logout me-1"></i>
                                     <span>Logout</span>
                                 </a>
@@ -450,68 +301,17 @@
                             </div>
                         </form>
 
-                        <div class="dropdown-menu dropdown-menu-animated dropdown-lg" id="search-dropdown">
-                            <!-- item-->
-                            <div class="dropdown-header noti-title">
-                                <h5 class="text-overflow mb-2">Found <span class="text-danger">17</span> results</h5>
-                            </div>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="uil-notes font-16 me-1"></i>
-                                <span>Analytics Report</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="uil-life-ring font-16 me-1"></i>
-                                <span>How can I help you?</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="uil-cog font-16 me-1"></i>
-                                <span>User profile settings</span>
-                            </a>
-
-                            <!-- item-->
-                            <div class="dropdown-header noti-title">
-                                <h6 class="text-overflow mb-2 text-uppercase">Users</h6>
-                            </div>
-
-                            <div class="notification-list">
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <div class="d-flex">
-                                        <img class="d-flex me-2 rounded-circle" src="assets/images/users/avatar-2.jpg"
-                                            alt="Generic placeholder image" height="32">
-                                        <div class="w-100">
-                                            <h5 class="m-0 font-14">Erwin Brown</h5>
-                                            <span class="font-12 mb-0">UI Designer</span>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <div class="d-flex">
-                                        <img class="d-flex me-2 rounded-circle" src="assets/images/users/avatar-5.jpg"
-                                            alt="Generic placeholder image" height="32">
-                                        <div class="w-100">
-                                            <h5 class="m-0 font-14">Jacob Deo</h5>
-                                            <span class="font-12 mb-0">Developer</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <!-- end Topbar -->
 
                 <!-- Start Content-->
                 <div class="container-fluid">
+
                     {% block content %}{% endblock %}
+
+
                 </div> <!-- container -->
 
             </div> <!-- content -->
@@ -521,7 +321,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
-                            <script>document.write(new Date().getFullYear())</script> © School voting system
+                            <script>document.write(new Date().getFullYear())</script> © Khaliil & Garsame
                         </div>
                         <div class="col-md-6">
                             <div class="text-md-end footer-links d-none d-md-block">
@@ -634,7 +434,7 @@
                     <button class="btn btn-primary" id="resetBtn">Reset to Default</button>
 
                     <a href="https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/"
-                        class="btn btn-danger mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase Now</a>
+                        class="btn btn-warning mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase Now</a>
                 </div>
             </div> <!-- end padding-->
 
@@ -644,220 +444,163 @@
     <div class="rightbar-overlay"></div>
     <!-- /End-bar -->
 
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form with spinner and alerts -->
+                    <!-- Form with spinner inside the button -->
+                    <form id="changePasswordForm">
+                        <div class="alert alert-danger d-none" id="passwordError"></div>
+                        <div class="alert alert-success d-none" id="passwordSuccess"></div>
+                        <input type="hidden" id="admin_id" name="admin_id" value="{{admin.id}}">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <!-- Current Password -->
+                        <div class="mb-3">
+                            <label for="oldPassword" class="form-label">Current
+                                Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control p-2 rounded-start rounded-end-0"
+                                    id="oldPassword" name="old_password" required>
+                                <button class="btn btn-light toggle-password shadow-none position-relative"
+                                    type="button" onclick="togglePasswordVisibility('oldPassword', this)">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback text-danger" id="oldPasswordFeedback"></div>
+                        </div>
 
+                        <!-- New Password -->
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control p-2 rounded-start rounded-end-0"
+                                    id="newPassword" name="new_password" required>
+                                <button class="btn btn-light toggle-password shadow-none position-relative"
+                                    type="button" onclick="togglePasswordVisibility('newPassword', this)">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback text-danger" id="newPasswordFeedback"></div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm New
+                                Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control p-2 rounded-start rounded-end-0"
+                                    id="confirmPassword" name="confirm_password" required>
+                                <button class="btn btn-light toggle-password shadow-none position-relative"
+                                    type="button" onclick="togglePasswordVisibility('confirmPassword', this)">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback text-danger" id="confirmPasswordFeedback"></div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="changePasswordBtn"
+                        onclick="submit_password_admin()">
+                        <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"
+                            aria-hidden="true"></span>
+                        <span id="btnText">Change Password</span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- bundle -->
-    <script src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/app.min.js"></script>
+    <script src="../../static/assets/js/vendor.min.js"></script>
+    <script src="../../static/assets/js/app.min.js"></script>
+
+    <!-- Apex js -->
+    <script src="../../static/assets/js/vendor/apexcharts.min.js"></script>
+
+    <!-- Todo js -->
+    <script src="../../static/assets/js/ui/component.todo.js"></script>
+
+    <!-- demo app -->
+    <script src="../../static/assets/js/pages/demo.dashboard-crm.js"></script>
+    <!-- end demo js-->
 
     <!-- third party js -->
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/jquery.dataTables.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/dataTables.bootstrap5.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/dataTables.responsive.min.js'"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/responsive.bootstrap5.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/dataTables.buttons.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/buttons.bootstrap5.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/buttons.html5.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/buttons.flash.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/buttons.print.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/dataTables.keyTable.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/dataTables.select.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/dataTables.select.min.js"></script>
+    <script src="../../static/assets/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="../../static/assets/js/vendor/dataTables.bootstrap5.js"></script>
+    <script src="../../static/assets/js/vendor/dataTables.responsive.min.js"></script>
+    <script src="../../static/assets/js/vendor/responsive.bootstrap5.min.js"></script>
+    <script src="../../static/assets/js/vendor/dataTables.checkboxes.min.js"></script>
     <!-- third party js ends -->
 
     <!-- demo app -->
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/pages/demo.customers.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/pages/demo.dashboard-crm.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/pages/demo.form-wizard.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/pages/demo.dashboard.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/pages/demo.datatable-init.js"></script>
+    <script src="../../static/assets/js/pages/demo.customers.js"></script>
+    <!-- end demo js-->
 
-    <!-- Todo js -->
-    <script src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/ui/component.todo.js"></script>
+    <script src="{{url_for('static', filename='admin/js/admin_password_change.js')}}"></script>
 
-
-
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/apexcharts.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/jquery-jvectormap-1.2.2.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor/jquery-jvectormap-world-mill-en.js"></script>
-
-    <!-- ADD THIS SCRIPT FOR THEME PERSISTENCE -->
     <script>
-        // Theme configuration
-        const defaultSettings = {
-            colorScheme: 'light',
-            width: 'fluid',
-            sidebarTheme: 'light',
-            sidebarCompact: 'fixed'
-        };
+        document.addEventListener("DOMContentLoaded", function () {
+            const body = document.body;
+            const lightModeToggle = document.getElementById('light-mode-check');
+            const darkModeToggle = document.getElementById('dark-mode-check');
 
-        // Initialize theme settings
-        document.addEventListener('DOMContentLoaded', function () {
-            // Load saved settings or use defaults
-            const savedSettings = JSON.parse(localStorage.getItem('themeSettings')) || defaultSettings;
+            // 🔹 Apply the saved theme on page load
+            const savedTheme = localStorage.getItem('themeMode') || 'light';
+            applyTheme(savedTheme);
 
-            // Apply saved settings
-            applyThemeSettings(savedSettings);
+            // 🔹 Light mode toggle
+            lightModeToggle.addEventListener('change', function () {
+                if (this.checked) {
+                    darkModeToggle.checked = false;
+                    applyTheme('light');
+                    localStorage.setItem('themeMode', 'light');
+                }
+            });
 
-            // Update UI controls to match saved settings
-            updateUIControls(savedSettings);
+            // 🔹 Dark mode toggle
+            darkModeToggle.addEventListener('change', function () {
+                if (this.checked) {
+                    lightModeToggle.checked = false;
+                    applyTheme('dark');
+                    localStorage.setItem('themeMode', 'dark');
+                }
+            });
 
-            // Add event listeners for theme controls
-            setupThemeControls();
+            // 🔹 Function to apply the theme
+            function applyTheme(mode) {
+                const config = body.getAttribute("data-layout-config");
+                const configObj = JSON.parse(config);
+
+                if (mode === 'dark') {
+                    configObj.darkMode = true;
+                    body.setAttribute("data-layout-config", JSON.stringify(configObj));
+                    document.getElementById('dark-style').disabled = false;
+                    document.getElementById('light-style').disabled = true;
+                    darkModeToggle.checked = true;
+                    lightModeToggle.checked = false;
+                } else {
+                    configObj.darkMode = false;
+                    body.setAttribute("data-layout-config", JSON.stringify(configObj));
+                    document.getElementById('dark-style').disabled = true;
+                    document.getElementById('light-style').disabled = false;
+                    darkModeToggle.checked = false;
+                    lightModeToggle.checked = true;
+                }
+            }
         });
-
-        // Apply theme settings to the page
-        function applyThemeSettings(settings) {
-            // Color scheme
-            if (settings.colorScheme === 'dark') {
-                document.body.setAttribute('data-layout-color', 'dark');
-                document.getElementById('dark-style').disabled = false;
-                document.getElementById('light-style').disabled = true;
-            } else {
-                document.body.setAttribute('data-layout-color', 'light');
-                document.getElementById('dark-style').disabled = true;
-                document.getElementById('light-style').disabled = false;
-            }
-
-            // Width
-            if (settings.width === 'boxed') {
-                document.body.classList.add('layout-boxed');
-            } else {
-                document.body.classList.remove('layout-boxed');
-            }
-
-            // Sidebar theme
-            document.body.setAttribute('data-leftbar-theme', settings.sidebarTheme);
-
-            // Sidebar compact
-            document.body.setAttribute('data-leftbar-compact-mode', settings.sidebarCompact);
-        }
-
-        // Update UI controls to match saved settings
-        function updateUIControls(settings) {
-            // Color scheme
-            document.getElementById('light-mode-check').checked = settings.colorScheme === 'light';
-            document.getElementById('dark-mode-check').checked = settings.colorScheme === 'dark';
-
-            // Width
-            document.getElementById('fluid-check').checked = settings.width === 'fluid';
-            document.getElementById('boxed-check').checked = settings.width === 'boxed';
-
-            // Sidebar theme
-            document.getElementById('default-check').checked = settings.sidebarTheme === 'default';
-            document.getElementById('light-check').checked = settings.sidebarTheme === 'light';
-            document.getElementById('dark-check').checked = settings.sidebarTheme === 'dark';
-
-            // Sidebar compact
-            document.getElementById('fixed-check').checked = settings.sidebarCompact === 'fixed';
-            document.getElementById('condensed-check').checked = settings.sidebarCompact === 'condensed';
-            document.getElementById('scrollable-check').checked = settings.sidebarCompact === 'scrollable';
-        }
-
-        // Setup event listeners for theme controls
-        function setupThemeControls() {
-            // Color scheme controls
-            document.getElementById('light-mode-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('colorScheme', 'light');
-                }
-            });
-
-            document.getElementById('dark-mode-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('colorScheme', 'dark');
-                }
-            });
-
-            // Width controls
-            document.getElementById('fluid-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('width', 'fluid');
-                }
-            });
-
-            document.getElementById('boxed-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('width', 'boxed');
-                }
-            });
-
-            // Sidebar theme controls
-            document.getElementById('default-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('sidebarTheme', 'default');
-                }
-            });
-
-            document.getElementById('light-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('sidebarTheme', 'light');
-                }
-            });
-
-            document.getElementById('dark-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('sidebarTheme', 'dark');
-                }
-            });
-
-            // Sidebar compact controls
-            document.getElementById('fixed-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('sidebarCompact', 'fixed');
-                }
-            });
-
-            document.getElementById('condensed-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('sidebarCompact', 'condensed');
-                }
-            });
-
-            document.getElementById('scrollable-check').addEventListener('change', function () {
-                if (this.checked) {
-                    saveSetting('sidebarCompact', 'scrollable');
-                }
-            });
-
-            // Reset button
-            document.getElementById('resetBtn').addEventListener('click', function () {
-                localStorage.removeItem('themeSettings');
-                applyThemeSettings(defaultSettings);
-                updateUIControls(defaultSettings);
-            });
-        }
-
-        // Save a setting to localStorage
-        function saveSetting(key, value) {
-            const settings = JSON.parse(localStorage.getItem('themeSettings')) || defaultSettings;
-            settings[key] = value;
-            localStorage.setItem('themeSettings', JSON.stringify(settings));
-            applyThemeSettings(settings);
-        }
     </script>
+
 </body>
 
 </html>

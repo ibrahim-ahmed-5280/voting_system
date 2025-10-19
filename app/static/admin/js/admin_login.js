@@ -8,9 +8,9 @@ function login() {
     const passError = document.getElementById('pass_error');
     const button = form.querySelector('button');
     const spinner = document.getElementById('spinner');
-    const buttonText = button.querySelector('.button-text');
+    const btnText = document.getElementById('btnText');
 
-    // Reset errors
+    // Reset error messages
     [emailError, passError].forEach(err => {
         err.style.opacity = 0;
         err.innerHTML = "";
@@ -18,7 +18,7 @@ function login() {
 
     let hasError = false;
 
-    // --- EMAIL VALIDATION ---
+    // --- VALIDATION ---
     const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     if (!emailPattern.test(email)) {
         emailError.style.opacity = 1;
@@ -26,7 +26,6 @@ function login() {
         hasError = true;
     }
 
-    // --- PASSWORD VALIDATION ---
     if (!password || password.length < 6) {
         passError.style.opacity = 1;
         passError.innerHTML = "Password must be at least 6 characters.";
@@ -38,7 +37,7 @@ function login() {
     // --- Disable inputs during submission ---
     button.disabled = true;
     spinner.classList.remove('d-none');
-    button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging...`;
+    btnText.textContent = 'Logging...';
     form.style.opacity = 0.8;
     inputs.forEach(input => input.disabled = true);
 
@@ -50,9 +49,6 @@ function login() {
     })
         .then(res => res.json())
         .then(data => {
-            form.style.opacity = 1;
-            inputs.forEach(input => input.disabled = false);
-
             if (data.success) {
                 window.location.href = '/dashboard_admin';
             } else {
@@ -72,10 +68,10 @@ function login() {
             alert('Something went wrong. Try again.');
         })
         .finally(() => {
-            // Reset button
+            // --- Always reset ---
             button.disabled = false;
             spinner.classList.add('d-none');
-            button.innerHTML = `Log In`;
+            btnText.textContent = 'Log In';
             form.style.opacity = 1;
             inputs.forEach(input => input.disabled = false);
         });
