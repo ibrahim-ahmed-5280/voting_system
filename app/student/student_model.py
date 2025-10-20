@@ -97,7 +97,6 @@ class UserModel:
 
 user_db_configuration = DbConfiguration()
 
-
 def check_user_model_connection():
     try:
         mysql_connect = UserDatabase(
@@ -107,11 +106,15 @@ def check_user_model_connection():
             password=user_db_configuration.DB_PASSWORD,
             database=user_db_configuration.DB_NAME
         )
-        # Create an instance of the Store class
+        
+        # Create database connection
         mysql_connect.make_connection()
+        
+        # Create model
         my_user_model = UserModel(mysql_connect.connection)
 
-        return True, my_user_model
+        # ✅ return also the connection so we can close it later
+        return True, my_user_model, mysql_connect.connection
+
     except Exception as e:
-        print(f'')
-        return False, f'Error: {e}.'
+        return False, f'Error: {e}', None

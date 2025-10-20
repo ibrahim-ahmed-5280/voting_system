@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Admission</title>
     <meta content="Skillup 24" name="author" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="./../../static/images/logo.png">
+    <link rel="shortcut icon" href="./../../static/images/logo1.png">
 
     <!-- third party css -->
     <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/vendor/dataTables.bootstrap5.css"
@@ -57,10 +56,10 @@
                         <!-- LOGO -->
                         <a href="" class="topnav-logo">
                             <span class="topnav-logo-lg">
-                                <img src="./../../static/images/logo.png" alt="" height="60">
+                                <img src="./../../static/images/logo1.png" alt="" height="60">
                             </span>
                             <span class="topnav-logo-sm">
-                                <img src="./../../static/images/logo.png" alt="" height="40">
+                                <img src="./../../static/images/logo1.png" alt="" height="40">
                             </span>
                         </a>
 
@@ -187,7 +186,7 @@
                             <div class="collapse navbar-collapse" id="topnav-menu-content">
                                 <ul class="navbar-nav">
                                     <li class="nav-item">
-                                        <a class="nav-link " href="#" id="topnav-apps">
+                                        <a class="nav-link " href="{{url_for('dashboard_user')}}" id="topnav-apps">
                                             <i class="uil-home-alt me-1"></i>Dashboard
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="topnav-apps">
@@ -195,10 +194,20 @@
                                         </div>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link d-flex align-items-center gap-1" href="#" id="topnav-apps">
+                                        <a class="nav-link d-flex align-items-center gap-1" href="{{url_for('events')}}" id="topnav-apps">
                                             <span class="material-symbols-outlined fs-4">
                                                 event_upcoming
                                             </span><span>Events</span>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="topnav-apps">
+                                            <!-- rest of your dropdown menu items -->
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center gap-1" href="{{url_for('voting')}}" id="topnav-apps">
+                                            <span class="material-symbols-outlined fs-4">
+                                                event_upcoming
+                                            </span><span>Voting</span>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="topnav-apps">
                                             <!-- rest of your dropdown menu items -->

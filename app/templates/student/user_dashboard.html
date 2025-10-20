@@ -1,5 +1,6 @@
 {% extends 'student/userBase.html' %}
 {% block content %}
+<title>{% block title %}Student | Dashboard{% endblock %}</title>
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -12,85 +13,98 @@
 <div class="row">
     <div class="col-12">
         <div class="row">
-            <!-- Courses Assigned Widget -->
+            <!-- Total Elections Widget -->
             <div class="col-lg-4">
                 <div class="card widget-flat">
                     <div class="card-body">
                         <div class="float-end">
-                            <i class="mdi mdi-book-open-page-variant widget-icon"></i>
+                            <i class="mdi mdi-ballot-outline widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of Courses">Courses Assigned</h5>
-                        <h3 class="mt-3 mb-3">  courses_assigned   </h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-success me-2">
-                                <i class="mdi mdi-arrow-up-bold"></i>   course_percentage   %
-                            </span>
-                            <span class="text-nowrap">At this semester</span>
-                        </p>
+                        <h5 class="text-muted fw-normal mt-0" title="Total Elections">Total Elections</h5>
+                        <h3 class="mt-3 mb-3" id="total_elections">0</h3>
                     </div>
                 </div>
             </div>
-    
-            <!-- Classes Assigned Widget -->
+        
+            <!-- Ongoing Elections Widget -->
             <div class="col-lg-4">
                 <div class="card widget-flat">
                     <div class="card-body">
                         <div class="float-end">
-                            <i class="mdi mdi-account-group-outline widget-icon"></i>
+                            <i class="mdi mdi-timer-sand widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of Classes">Classes Assigned</h5>
-                        <h3 class="mt-3 mb-3">  classes_assigned   </h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-success me-2">
-                                <i class="mdi mdi-arrow-down-bold"></i>   class_percentage   %
-                            </span>
-                            <span class="text-nowrap">At this semester</span>
-                        </p>
+                        <h5 class="text-muted fw-normal mt-0" title="Ongoing Elections">Ongoing Elections</h5>
+                        <h3 class="mt-3 mb-3" id="ongoing_elections">0</h3>
                     </div>
                 </div>
             </div>
-    
-            <!-- Periods Given Weekly Widget -->
+        
+            <!-- Participated Elections Widget -->
+            <div class="col-lg-4">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-account-check-outline widget-icon"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Your Participation">Participated Elections</h5>
+                        <h3 class="mt-3 mb-3" id="participated_elections">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Upcoming Elections Widget -->
             <div class="col-lg-4">
                 <div class="card widget-flat">
                     <div class="card-body">
                         <div class="float-end">
                             <i class="mdi mdi-calendar-clock widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Courses Given Weekly">Periods Given Weekly</h5>
-                        <h3 class="mt-3 mb-3">  weekly_courses_given   </h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-success me-2">
-                                <i class="mdi mdi-arrow-down-bold"></i>   weekly_course_percentage   
-                            </span>
-                            <span class="text-nowrap">At this semester</span>
-                        </p>
+                        <h5 class="text-muted fw-normal mt-0" title="Upcoming Elections">Upcoming Elections</h5>
+                        <h3 class="mt-3 mb-3" id="upcoming_elections">0</h3>
                     </div>
                 </div>
             </div>
-        </div> <!-- end row -->
-    
-        <div class="row">
-            <!-- Exams Taken Widget -->
+        
+            <!-- Completed Elections Widget -->
             <div class="col-lg-4">
                 <div class="card widget-flat">
                     <div class="card-body">
                         <div class="float-end">
-                            <i class="mdi mdi-school-outline widget-icon"></i>
+                            <i class="mdi mdi-check-circle-outline widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Exams Conducted">Exams Taken</h5>
-                        <h3 class="mt-3 mb-3">  exams_taken   </h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-success me-2">
-                                <i class="mdi mdi-arrow-up-bold"></i>   exam_percentage  
-                            </span>
-                            <span class="text-nowrap">At this semester</span>
-                        </p>
+                        <h5 class="text-muted fw-normal mt-0" title="Completed Elections">Completed Elections</h5>
+                        <h3 class="mt-3 mb-3" id="completed_elections">0</h3>
                     </div>
                 </div>
             </div>
-        </div> <!-- end row -->
+        </div>
+        
     </div> <!-- end col -->
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    fetch('/dashboard_data')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const d = data.data;
+                document.getElementById('total_elections').innerText = d.total_elections;
+                document.getElementById('ongoing_elections').innerText = d.ongoing;
+                document.getElementById('participated_elections').innerText = d.participated;
+                document.getElementById('upcoming_elections').innerText = d.upcoming;
+                document.getElementById('completed_elections').innerText = d.completed;
+            } else {
+                console.error('Dashboard data error:', data.message);
+            }
+        })
+        .catch(err => console.error('Fetch error:', err));
+});
+
+    </script>
     
 
     {% endblock %}
