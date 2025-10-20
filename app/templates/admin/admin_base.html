@@ -60,17 +60,17 @@
                     <img src="../../static/images/logo.png" alt="" height="50">
                 </span>
                 <span class="logo-sm">
-                    <img src="../../static/images/logo3.png" alt="" height="30">
+                    <img src="../../static/images/logo.png" alt="" height="30">
                 </span>
             </a>
 
             <!-- LOGO -->
             <a href="index.html" class="logo text-center logo-dark">
                 <span class="logo-lg">
-                    <img src="../../static/images/dark_logo.png" alt="" height="50">
+                    <img src="../../static/images/logo.png" alt="" height="50">
                 </span>
                 <span class="logo-sm">
-                    <img src="../../static/images/dark_logo2.png" alt="" height="30">
+                    <img src="../../static/images/logo.png" alt="" height="30">
                 </span>
             </a>
 
@@ -548,58 +548,6 @@
     <!-- end demo js-->
 
     <script src="{{url_for('static', filename='admin/js/admin_password_change.js')}}"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const body = document.body;
-            const lightModeToggle = document.getElementById('light-mode-check');
-            const darkModeToggle = document.getElementById('dark-mode-check');
-
-            // 🔹 Apply the saved theme on page load
-            const savedTheme = localStorage.getItem('themeMode') || 'light';
-            applyTheme(savedTheme);
-
-            // 🔹 Light mode toggle
-            lightModeToggle.addEventListener('change', function () {
-                if (this.checked) {
-                    darkModeToggle.checked = false;
-                    applyTheme('light');
-                    localStorage.setItem('themeMode', 'light');
-                }
-            });
-
-            // 🔹 Dark mode toggle
-            darkModeToggle.addEventListener('change', function () {
-                if (this.checked) {
-                    lightModeToggle.checked = false;
-                    applyTheme('dark');
-                    localStorage.setItem('themeMode', 'dark');
-                }
-            });
-
-            // 🔹 Function to apply the theme
-            function applyTheme(mode) {
-                const config = body.getAttribute("data-layout-config");
-                const configObj = JSON.parse(config);
-
-                if (mode === 'dark') {
-                    configObj.darkMode = true;
-                    body.setAttribute("data-layout-config", JSON.stringify(configObj));
-                    document.getElementById('dark-style').disabled = false;
-                    document.getElementById('light-style').disabled = true;
-                    darkModeToggle.checked = true;
-                    lightModeToggle.checked = false;
-                } else {
-                    configObj.darkMode = false;
-                    body.setAttribute("data-layout-config", JSON.stringify(configObj));
-                    document.getElementById('dark-style').disabled = true;
-                    document.getElementById('light-style').disabled = false;
-                    darkModeToggle.checked = false;
-                    lightModeToggle.checked = true;
-                }
-            }
-        });
-    </script>
 
 </body>
 

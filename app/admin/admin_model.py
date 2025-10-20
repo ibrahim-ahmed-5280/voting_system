@@ -612,11 +612,12 @@ class AdminModel:
             LEFT JOIN votes v 
                 ON c.id = v.candidate_id 
                 AND v.election_id = c.election_id
+            WHERE c.status = 'approved'
         """
         params = []
 
         if election_id:
-            sql += " WHERE c.election_id = %s"
+            sql += " AND c.election_id = %s"
             params.append(election_id)
 
         sql += " GROUP BY c.id, c.name ORDER BY votes DESC"
