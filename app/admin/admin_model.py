@@ -871,6 +871,88 @@ class AdminModel:
             print(f"Error fetching dashboard stats: {e}")
             return False, f"Error: {e}"
 
+    def finalize_elections(self):
+        try:
+            # 1) Mark elections as completed if their end_date has passed
+            sql_update_elections = """
+                UPDATE election
+                SET status = 'completed'
+                WHERE end_date <= NOW()
+                  AND status != 'completed';
+            """
+            self.cursor.execute(sql_update_elections)
+            self.connection.commit()  # commit the status update first (optional)
+
+            # 2) Get list of completed elections
+            self.cursor.execute("SELECT id FROM election WHERE status = 'completed'")
+            completed_elections = [row[0] for row in self.cursor.fetchall()]
+            if not completed_elections:
+                print("No completed elections found.")
+                return True
+
+            # 3) Get vote counts for candidates but only for completed elections
+            format_ids = ",".join(str(int(x)) for x in completed_elections)
+            sql_counts = f"""
+                SELECT election_id, candidate_id, COUNT(*) as votes
+                FROM votes
+                WHERE election_id IN ({format_ids})
+                GROUP BY election_id, candidate_id
+            """
+            self.cursor.execute(sql_counts)
+            rows = self.cursor.fetchall()
+
+            # Organize into dictionary: election_id -> list of (candidate_id, votes)
+            elections = {}
+            for election_id, candidate_id, votes in rows:
+                elections.setdefault(election_id, []).append((candidate_id, votes))
+
+            # For each completed election, determine winner (only if single top)
+            for election_id in completed_elections:
+                candidates_votes = elections.get(election_id, [])
+
+                # If there are no votes for this election, skip (no changes)
+                if not candidates_votes:
+                    continue
+
+                # Find max votes
+                max_votes = max(v for _, v in candidates_votes)
+                top_candidates = [cid for cid, v in candidates_votes if v == max_votes]
+
+                # If tie (more than 1 top candidate) -> skip (no status change)
+                if len(top_candidates) != 1:
+                    # optionally log which election was skipped
+                    print(
+                        f"Election {election_id} has a tie for top votes ({len(top_candidates)} tied). Skipping status updates.")
+                    continue
+
+                # Single winner: update statuses
+                winner_id = top_candidates[0]
+
+                # Set winner -> 'elected' (only if not already elected/lost)
+                try:
+                    self.change_candidate_status('elected', winner_id)
+                except Exception as e:
+                    print(f"Failed to set elected for candidate {winner_id}: {e}")
+
+                # Set other candidates in the same election to 'lost' (if not already elected/lost)
+                for cid, _ in candidates_votes:
+                    if cid == winner_id:
+                        continue
+                    try:
+                        self.change_candidate_status('lost', cid)
+                    except Exception as e:
+                        print(f"Failed to set lost for candidate {cid}: {e}")
+
+            # commit any changes (change_candidate_status likely commits, but safe to ensure)
+            self.connection.commit()
+            print("✅ Election finalization completed successfully (ties ignored).")
+            return True
+
+        except Exception as e:
+            print(f"❌ Error during finalization: {e}")
+            self.connection.rollback()
+            return False
+
 
 admin_db_configuration = DbConfiguration()
 

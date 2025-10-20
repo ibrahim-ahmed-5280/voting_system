@@ -1,0 +1,268 @@
+{% extends 'student/userBase.html' %}
+{% block content %}
+<title>{% block title %}Student | Events{% endblock %}</title>
+<style>
+    :root {
+        --primary-color: #0d6efd;
+        --secondary-color: #6c757d;
+        --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --border-radius: 12px;
+    }
+
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    }
+
+    .header {
+        text-align: left;
+        margin-bottom: 3rem;
+        padding: 0 1rem;
+    }
+
+    .header h1 {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .header p {
+        color: var(--secondary-color);
+        max-width: 600px;
+    }
+
+    .election-container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0 1rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-img-container {
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .card-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .card:hover .card-img-container img {
+        transform: scale(1.05);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .election-type {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .election-title {
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+        color: #333;
+    }
+
+    .election-description {
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+        flex-grow: 1;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-view-candidates {
+        background-color: var(--primary-color);
+        border: none;
+        border-radius: 6px;
+        padding: 0.5rem 1.25rem;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-view-candidates:hover {
+        background-color: #0b5ed7;
+    }
+
+    @media (max-width: 768px) {
+        .card-img-container {
+            height: 180px;
+        }
+
+        .btn-container {
+            justify-content: flex-start;
+            margin-top: 1rem;
+        }
+    }
+</style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="header">
+            <h1>Upcoming Elections</h1>
+            <p>Participate in shaping the future of our nation and community. Your vote matters.</p>
+        </div>
+
+        <div class="election-container">
+            <div class="events-container">
+                {% if elections %}
+                {% for election in elections %}
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <div class="card-img-container">
+                                <!-- Dynamic election image from database -->
+                                {% if election.photo_path %}
+                                <img src="{{ url_for('static', filename='uploads/elections/' + election.photo_path) }}" 
+                                     alt="{{ election.election_name }} Image">
+                                {% else %}
+                                <img src="./../../static/images/doorasho.jpg" alt="{{ election.election_name }} Image">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="election-type">
+                                    <span class="badge bg-{{ 'success' if election.status == 'ongoing' else 'warning' if election.status == 'upcoming' else 'secondary' }}">
+                                        {{ election.status|capitalize }}
+                                    </span>
+                                </div>
+                                <h5 class="election-title">{{ election.election_name }}</h5>
+                                <p class="election-description">{{ election.description }}</p>
+            
+                                <div class="election-info">
+                                    <div class="election-dates">
+                                        <small class="text-muted">
+                                            <strong>Starts:</strong> {{ election.start_date.strftime('%Y-%m-%d %H:%M') }}<br>
+                                            <strong>Ends:</strong> {{ election.end_date.strftime('%Y-%m-%d %H:%M') }}
+                                        </small>
+                                    </div>
+                                    <div class="candidate-count">
+                                        <small class="text-muted">
+                                            <strong>Candidates:</strong> {{ election.candidate_count }}
+                                        </small>
+                                    </div>
+                                </div>
+            
+                                <!-- Button logic based on election status -->
+                                <div class="btn-container">
+                                    {% if election.status == 'ongoing' %}
+                                    <!-- Active voting button -->
+                                    <a href="/voting/{{ election.id }}" class="btn btn-primary btn-view-candidates">
+                                        View Candidates & Vote →
+                                    </a>
+                                    {% elif election.status == 'upcoming' %}
+                                    <!-- Disabled button with warning -->
+                                    <button class="btn btn-secondary" disabled>
+                                        View Candidates
+                                    </button>
+                                    <small class="text-warning d-block mt-1">
+                                        ⏳ Election will start soon
+                                    </small>
+                                    {% elif election.status == 'completed' %}
+                                    <!-- View results button -->
+                                    <a href="/voting/{{ election.id }}" class="btn btn-outline-primary btn-view-candidates">
+                                        View Results →
+                                    </a>
+                                    {% endif %}
+                                </div>
+            
+                                <!-- Winner section for completed elections -->
+                                {% if election.status == 'completed' %}
+                                {% set winner = namespace(found=false) %}
+                                {% for candidate in election.candidates if candidate.status == 'elected' %}
+                                    {% set winner.found = true %}
+                                    <div class="winner-section mt-3 p-3 bg-light rounded">
+                                        <div class="d-flex align-items-center">
+                                            <div class="winner-badge me-3">
+                                                <span class="material-symbols-outlined text-success fs-2">
+                                                    military_tech
+                                                </span>
+                                            </div>
+                                            <div class="winner-info">
+                                                <h6 class="mb-1 text-success">🏆 Election Winner</h6>
+                                                <p class="mb-0 fw-bold">{{ candidate.name }}</p>
+                                                <small class="text-muted">Congratulations to the winner!</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {% if not winner.found %}
+                                    <div class="winner-section mt-3 p-3 bg-light rounded">
+                                        <div class="text-center">
+                                            <span class="material-symbols-outlined text-secondary">
+                                                question_mark
+                                            </span>
+                                            <p class="mb-0 text-muted">Winner not announced yet</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="alert alert-info text-center">
+                    <h5>No elections available at the moment.</h5>
+                    <p>Check back later for upcoming elections.</p>
+                </div>
+                {% endif %}
+            </div>
+
+
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                card.addEventListener('click', function (e) {
+                    if (e.target.classList.contains('btn-view-candidates')) {
+                        // In a real application, this would navigate to the candidates page
+                        alert('This would navigate to the candidates page for ' +
+                            this.querySelector('.election-title').textContent);
+                    }
+                });
+            });
+        });
+    </script>
+
+    {% endblock %}

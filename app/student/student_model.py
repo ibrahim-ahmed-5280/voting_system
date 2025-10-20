@@ -3,8 +3,8 @@ from app.configuration import DbConfiguration
 from mysql.connector import Error, IntegrityError
 from flask_bcrypt import Bcrypt
 from app import app
-import datetime
 from datetime import datetime, timedelta
+
 bcrypt = Bcrypt(app)
 
 class UserDatabase:
@@ -14,6 +14,8 @@ class UserDatabase:
         self.user = user
         self.password = password
         self.database = database
+        self.connection = None
+        self.cursor = None
 
     def make_connection(self):
         try:
@@ -23,31 +25,77 @@ class UserDatabase:
                 user=self.user,
                 password=self.password,
                 database=self.database,
+                auth_plugin='mysql_native_password'  # ensures compatibility
             )
-            self.cursor = self.connection.cursor()
-        except Exception as e:
-            print(e)
+            self.cursor = self.connection.cursor(dictionary=True)
+
+            print("✅ Database connection successful.")
+        except Error as e:
+            print(f"❌ Database connection error: {e}")
+            self.connection = None
+            self.cursor = None
 
     def my_cursor(self):
         return self.cursor
+
 
 
 class UserModel:
     def __init__(self, connection):
         try:
             self.connection = connection
-            self.cursor = connection.cursor()
+            self.cursor = connection.cursor(dictionary=True)
         except Exception as err:
-            print('Something went wrong! Internet connection or database connection. (Admin DB)')
+            print('Something went wrong! Database connection issue.')
             print(f'Error: {err}')
 
-        # retrieving data
-        #login
+    def check_login(self, user_id, role):
+        """Check user login by role and ID."""
+        try:
+            if role == 'student':
+                query = "SELECT * FROM students WHERE school_id = %s"
+            elif role == 'teacher':
+                query = "SELECT * FROM teachers WHERE teacher_id = %s"
+            else:
+                return False, None
+
+            self.cursor.execute(query, (user_id,))
+            result = self.cursor.fetchall()
+
+            if result and len(result) > 0:
+                return True, result
+            else:
+                return False, None
+
+        except Exception as e:
+            print(f"Error in check_login: {e}")
+            return False, None
+
+    def check_user(self, user_id, role):
+        try:
+            if role == 'student':
+                query = "SELECT * FROM students WHERE id = %s"
+            elif role == 'teacher':
+                query = "SELECT * FROM teachers WHERE id = %s"
+            else:
+                return False, None
+
+            self.cursor.execute(query, (user_id,))
+            result = self.cursor.fetchall()
+
+            if result and len(result) > 0:
+                return True, result
+            else:
+                return False, None
+
+        except Exception as e:
+            print(f"Error in check_login: {e}")
+            return False, None
+
 
 
 
 user_db_configuration = DbConfiguration()
-
 
 def check_user_model_connection():
     try:
@@ -58,11 +106,15 @@ def check_user_model_connection():
             password=user_db_configuration.DB_PASSWORD,
             database=user_db_configuration.DB_NAME
         )
-        # Create an instance of the Store class
+        
+        # Create database connection
         mysql_connect.make_connection()
+        
+        # Create model
         my_user_model = UserModel(mysql_connect.connection)
 
-        return True, my_user_model
+        # ✅ return also the connection so we can close it later
+        return True, my_user_model, mysql_connect.connection
+
     except Exception as e:
-        print(f'')
-        return False, f'Error: {e}.'
+        return False, f'Error: {e}', None

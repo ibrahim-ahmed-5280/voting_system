@@ -46,6 +46,7 @@ def inject_admin_data():
         if connection_status:
             try:
                 _, admin_data = admin_model.check_login(email)
+                flag = admin_model.finalize_elections()
                 if admin_data:
                     context.update({
                         'admin': admin_data[0]
