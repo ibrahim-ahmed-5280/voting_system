@@ -87,15 +87,15 @@
                                         <a href="#" class="action-icon view-icon d-flex align-items-start"
                                             data-bs-toggle="dropdown">
                                             {% if candidate.status in ['lost', 'rejected', 'withdrawn'] %}
-                                            <span class="badge bg-danger">{{ candidate.status }}</span>
+                                            <span class="badge bg-danger text-capitalize" style="width:80px">{{ candidate.status }}</span>
                                             {% elif candidate.status == 'pending' %}
-                                            <span class="badge bg-warning text-dark">{{ candidate.status }}</span>
+                                            <span class="badge bg-warning text-dark text-capitalize" style="width:80px">{{ candidate.status }}</span>
                                             {% elif candidate.status == 'elected' %}
-                                            <span class="badge bg-primary">{{ candidate.status }}</span>
+                                            <span class="badge bg-primary text-capitalize" style="width:80px">{{ candidate.status }}</span>
                                             {% elif candidate.status == 'approved' %}
-                                            <span class="badge bg-success">{{ candidate.status }}</span>
+                                            <span class="badge bg-success text-capitalize" style="width:80px">{{ candidate.status }}</span>
                                             {% else %}
-                                            <span class="badge bg-secondary">{{ candidate.status }}</span>
+                                            <span class="badge bg-secondary text-capitalize" style="width:80px">{{ candidate.status }}</span>
                                             {% endif %}
                                         </a>
 

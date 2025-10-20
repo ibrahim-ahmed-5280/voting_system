@@ -894,10 +894,11 @@ class AdminModel:
             # 3) Get vote counts for candidates but only for completed elections
             format_ids = ",".join(str(int(x)) for x in completed_elections)
             sql_counts = f"""
-                SELECT election_id, candidate_id, COUNT(*) as votes
-                FROM votes
-                WHERE election_id IN ({format_ids})
-                GROUP BY election_id, candidate_id
+                SELECT c.election_id, c.id AS candidate_id, COUNT(v.id) AS votes
+                FROM candidates c
+                LEFT JOIN votes v ON c.id = v.candidate_id
+                WHERE c.election_id IN ({format_ids})
+                GROUP BY c.election_id, c.id
             """
             self.cursor.execute(sql_counts)
             rows = self.cursor.fetchall()

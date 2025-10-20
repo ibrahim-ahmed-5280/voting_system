@@ -33,7 +33,7 @@ function election_registration() {
     let hasError = false;
 
     // --- Validation ---
-    if (!name) {
+    if (!name.value) {
         nameError.textContent = "Election name is required.";
         nameError.classList.remove('d-none');
         hasError = true;
@@ -62,7 +62,7 @@ function election_registration() {
         valid = false;
     }
 
-    if (!description) {
+    if (!description.value) {
         descError.textContent = "Description is required.";
         descError.classList.remove('d-none');
         hasError = true;
