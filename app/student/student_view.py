@@ -31,6 +31,66 @@ def dashboard_user():
 
     return render_template("student/user_dashboard.html", user_name=user_name, user_role=user_role,user_id=user_id)
 
+@app.route('/dashboard_data', methods=['GET'])
+def dashboard_data():
+    # Step 0: check login
+    if 'user_id' not in session or 'role' not in session:
+        return jsonify({"success": False, "message": "Unauthorized"}), 401
+
+    user_id = session['user_id']
+    role = session['role']  # 'student' or 'teacher'
+
+    try:
+        # Step 1: connect to DB
+        status, user_model, conn = check_user_model_connection()
+        if not status:
+            return jsonify({"success": False, "message": "Database connection failed"}), 500
+
+        cursor = conn.cursor(dictionary=True)
+
+        # Step 2: total elections
+        cursor.execute("SELECT COUNT(*) AS total_elections FROM election")
+        total_elections = cursor.fetchone()['total_elections']
+
+        # Step 3: elections by status
+        cursor.execute("""
+            SELECT 
+                SUM(status='ongoing') AS ongoing,
+                SUM(status='upcoming') AS upcoming,
+                SUM(status='completed') AS completed
+            FROM election
+        """)
+        status_counts = cursor.fetchone()
+
+        # Step 4: elections the user participated in
+        cursor.execute("""
+            SELECT COUNT(DISTINCT election_id) AS participated
+            FROM votes
+            WHERE voter_type = %s AND voter_id = %s
+        """, (role, user_id))
+        participated = cursor.fetchone()['participated']
+
+        # Step 5: close cursor and connection
+        cursor.close()
+        conn.close()
+
+        # Step 6: return JSON
+        return jsonify({
+            "success": True,
+            "data": {
+                "total_elections": total_elections,
+                "ongoing": status_counts['ongoing'],
+                "upcoming": status_counts['upcoming'],
+                "completed": status_counts['completed'],
+                "participated": participated
+            }
+        })
+
+    except Exception as e:
+        print("Dashboard error:", e)
+        return jsonify({"success": False, "message": str(e)}), 500
+    
+    
 @app.route('/events')
 def events():
     if 'user_id' not in session:
@@ -80,7 +140,7 @@ def events():
                     print(f"Photo Path is empty string: {photo_path == ''}")
                     if photo_path:
                         print(f"Photo Path length: {len(photo_path)}")
-                        print(f"Expected static URL: {url_for('static', filename='uploads/elections/' + photo_path)}")
+                        print(f"Expected static URL: {url_for('static', filename='uploads/' + photo_path)}")
             
             # For each election, get candidate details to check for winners
             print("\n" + "="*50)
@@ -223,64 +283,7 @@ def submit_vote():
 from flask import session, jsonify
 from app import app
 
-@app.route('/dashboard_data', methods=['GET'])
-def dashboard_data():
-    # Step 0: check login
-    if 'user_id' not in session or 'role' not in session:
-        return jsonify({"success": False, "message": "Unauthorized"}), 401
 
-    user_id = session['user_id']
-    role = session['role']  # 'student' or 'teacher'
-
-    try:
-        # Step 1: connect to DB
-        status, user_model, conn = check_user_model_connection()
-        if not status:
-            return jsonify({"success": False, "message": "Database connection failed"}), 500
-
-        cursor = conn.cursor(dictionary=True)
-
-        # Step 2: total elections
-        cursor.execute("SELECT COUNT(*) AS total_elections FROM election")
-        total_elections = cursor.fetchone()['total_elections']
-
-        # Step 3: elections by status
-        cursor.execute("""
-            SELECT 
-                SUM(status='ongoing') AS ongoing,
-                SUM(status='upcoming') AS upcoming,
-                SUM(status='completed') AS completed
-            FROM election
-        """)
-        status_counts = cursor.fetchone()
-
-        # Step 4: elections the user participated in
-        cursor.execute("""
-            SELECT COUNT(DISTINCT election_id) AS participated
-            FROM votes
-            WHERE voter_type = %s AND voter_id = %s
-        """, (role, user_id))
-        participated = cursor.fetchone()['participated']
-
-        # Step 5: close cursor and connection
-        cursor.close()
-        conn.close()
-
-        # Step 6: return JSON
-        return jsonify({
-            "success": True,
-            "data": {
-                "total_elections": total_elections,
-                "ongoing": status_counts['ongoing'],
-                "upcoming": status_counts['upcoming'],
-                "completed": status_counts['completed'],
-                "participated": participated
-            }
-        })
-
-    except Exception as e:
-        print("Dashboard error:", e)
-        return jsonify({"success": False, "message": str(e)}), 500
 
 
 from flask import request, jsonify, session

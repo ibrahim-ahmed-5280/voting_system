@@ -5,60 +5,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if election %}{{ election.election_name }} - Voting{% else %}Voting{% endif %}</title>
+    <title>Election Voting</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .no-election-container {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin: 2rem auto;
-            max-width: 600px;
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         }
         
-        .no-election-icon {
-            font-size: 4rem;
-            color: #6c757d;
-            margin-bottom: 1rem;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
         
         .election-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
             color: white;
-            padding: 2rem 0;
+            padding: 3rem 0;
             margin-bottom: 2rem;
+        }
+        
+        .back-btn {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .back-btn:hover {
+            color: white;
+        }
+        
+        .section-title {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .intro-text {
+            color: #6b7280;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
         }
         
         .candidate-card {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             height: 100%;
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-hover-shadow);
+        }
+        
+        .candidate-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: 50% 10%;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .candidate-content {
+            padding: 1.5rem;
+        }
+        
+        .candidate-name {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+        
+        .candidate-position {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .candidate-statement {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .vote-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        
+        .vote-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .search-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
             margin-bottom: 2rem;
         }
         
-        /* Rest of your existing styles... */
+        .search-input {
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+            outline: none;
+        }
+        
+        .no-election-container {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .no-election-icon {
+            font-size: 4rem;
+            color: #9ca3af;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 1.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .badge {
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+        }
+        
+        @media (max-width: 768px) {
+            .election-header {
+                padding: 2rem 0;
+            }
+            
+            .candidate-card {
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Voting System</a>
-            <div class="navbar-nav ms-auto">
-                <span class="navbar-text me-3">
-                    Welcome, {{ user_name }} ({{ user_role }})
-                </span>
-                <a class="nav-link" href="/events">Back to Events</a>
-                <a class="nav-link" href="/logout">Logout</a>
-            </div>
-        </div>
-    </nav>
 
     {% if election %}
         <!-- Show election content when election exists -->
@@ -87,12 +244,27 @@
             </div>
         </div>
 
+        <!-- Search Section -->
+        <div class="container">
+            <div class="search-container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h3 class="mb-3">Candidates for {{ election.election_name }}</h3>
+                        <p class="text-muted mb-0">Select a candidate to view their detailed platform and qualifications. Your informed vote shapes our community's future.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="search-input" placeholder="Search candidates by name or focus area">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Candidates Section -->
         <div class="container">
             <h2 class="section-title">Meet the Candidates</h2>
             <p class="intro-text">Click the vote button to cast your vote for the candidate who best represents your vision for our community.</p>
             
-            <div class="row" id="candidatesContainer">
+            <div class="row" id="candidatesContainer" style="margin-bottom: 30px;">
                 {% if candidates %}
                     {% for candidate in candidates %}
                     <!-- Dynamic Candidate Card -->
@@ -103,7 +275,7 @@
                             <img src="{{ url_for('static', filename='uploads/candidates/' + candidate.photo) }}" 
                                  alt="{{ candidate.name }}" class="candidate-image">
                             {% else %}
-                            <img src="https://via.placeholder.com/300x250/667eea/ffffff?text=Candidate+Photo" 
+                            <img src="https://via.placeholder.com/300x200/667eea/ffffff?text=Candidate+Photo" 
                                  alt="{{ candidate.name }}" class="candidate-image">
                             {% endif %}
                             
@@ -114,7 +286,7 @@
                                     {{ candidate.statement or "No statement provided." }}
                                 </div>
                                 <button class="vote-btn" 
-                                        onclick="voteForCandidate(`{{ candidate.id }}, '{{ candidate.name }}', {{ election.id }}`)">
+                                        onclick="voteForCandidate(`{{ candidate.id }}`, '{{ candidate.name }}', `{{ election.id }}`)">
                                     Vote for {{ candidate.name.split(' ')[0] }}
                                 </button>
                             </div>
@@ -123,9 +295,9 @@
                     {% endfor %}
                 {% else %}
                     <div class="col-12">
-                        <div class="no-candidates">
+                        <div class="no-candidates text-center py-5">
                             <h3>No Candidates Available</h3>
-                            <p>There are no candidates for this election yet. Please check back later.</p>
+                            <p class="text-muted">There are no candidates for this election yet. Please check back later.</p>
                             <a href="/events" class="btn btn-primary">Back to Elections</a>
                         </div>
                     </div>
@@ -179,6 +351,7 @@
         </div>
     </div>
     {% endif %}
+    
     {% if election %}
     <script>
         let selectedCandidateId = null;
@@ -228,6 +401,26 @@
                 alert('Error submitting vote. Please try again.');
             });
         }
+        
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const candidateItems = document.querySelectorAll('.candidate-item');
+            
+            candidateItems.forEach(item => {
+                const candidateName = item.querySelector('.candidate-name').textContent.toLowerCase();
+                const candidatePosition = item.querySelector('.candidate-position').textContent.toLowerCase();
+                const candidateStatement = item.querySelector('.candidate-statement').textContent.toLowerCase();
+                
+                if (candidateName.includes(searchTerm) || 
+                    candidatePosition.includes(searchTerm) || 
+                    candidateStatement.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
     </script>
     {% endif %}
 </body>

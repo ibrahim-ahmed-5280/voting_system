@@ -58,6 +58,7 @@
                                 <th>Candidate</th>
                                 <th>Election</th>
                                 <th>Total Votes</th>
+                                <th>Decision</th>
                             </tr>
                         </thead>
                         <tbody id="results-body">
@@ -76,6 +77,15 @@
                                 <td>{{ result.candidate_name }}</td>
                                 <td>{{ result.election_name }}</td>
                                 <td>{{ result.votes }}</td>
+                                <td>
+                                    {%if result.status == 'elected'%}
+                                    <span class="badge bg-primary">{{ result.status }}</span>
+                                    {%elif result.status == 'lost'%}
+                                    <span class="badge bg-danger">{{ result.status }}</span>
+                                    {%else%}
+                                    <span class="badge bg-success">{{ result.status }}</span>
+                                    {%endif%}
+                                </td>
                             </tr>
                             {% endfor %}
                             {% else %}

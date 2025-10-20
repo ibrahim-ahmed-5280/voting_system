@@ -679,6 +679,7 @@ class AdminModel:
                 c.name AS candidate_name,
                 e.id AS election_id,
                 e.election_name,
+                c.status,
                 COALESCE(COUNT(v.id), 0) AS votes
             FROM candidates c
             LEFT JOIN votes v ON c.id = v.candidate_id
