@@ -418,7 +418,7 @@ def voting_with_id(election_id):
     print(f"   - Election results: {len(election_results) if election_results else 0}")
     print("="*60 + "\n")
 
-    return render_template("student/voting.html", 
+    return render_template("student/Voting.html",
                          user_name=user_name, 
                          user_role=user_role, 
                          user_id=user_id,
@@ -436,7 +436,7 @@ def voting():
     user_role = session.get('role', 'student').capitalize()
     user_id = session.get('user_id')
 
-    return render_template("student/voting.html", 
+    return render_template("student/Voting.html",
                          user_name=user_name, 
                          user_role=user_role, 
                          user_id=user_id,
