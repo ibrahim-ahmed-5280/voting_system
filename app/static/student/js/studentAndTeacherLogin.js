@@ -77,7 +77,7 @@ function login() {
 
         if (data.success) {
             // Redirect to student dashboard
-            window.location.href = data.redirect || '/dashboard_user';
+            window.location.href = data.redirect || '/events';
         } else {
             if (data.error === 'invalid_id' && idError) {
                 idError.style.opacity = 1;

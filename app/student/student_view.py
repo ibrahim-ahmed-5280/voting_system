@@ -598,7 +598,7 @@ def student_or_teacher_login():
     return jsonify({
         "success": True,
         "message": "Student login successful.",
-        "redirect": "/dashboard_user"
+        "redirect": "/events"
     }), 200
 from flask_bcrypt import Bcrypt
 
