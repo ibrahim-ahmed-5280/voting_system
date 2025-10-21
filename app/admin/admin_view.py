@@ -11,6 +11,8 @@ import pandas as pd
 import re
 
 bcrypt = Bcrypt(app)
+# vbfsdvbf
+
 
 UPLOAD_FOLDER_ELECTION = os.path.join(app.root_path, 'static', 'uploads/elections')
 UPLOAD_FOLDER_CANDIDATES = os.path.join(app.root_path, 'static', 'uploads/candidates')
