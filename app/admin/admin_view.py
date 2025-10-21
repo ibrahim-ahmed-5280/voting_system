@@ -12,14 +12,15 @@ import re
 
 bcrypt = Bcrypt(app)
 
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
+UPLOAD_FOLDER_ELECTION = os.path.join(app.root_path, 'static', 'uploads/elections')
+UPLOAD_FOLDER_CANDIDATES = os.path.join(app.root_path, 'static', 'uploads/candidates')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
     """Check if the uploaded file has an allowed extension."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def upload_photo(photo):
+def upload_photo_election(photo):
     """Handles photo upload validation and saving."""
     if not photo:
         return False, "No photo uploaded"
@@ -28,10 +29,22 @@ def upload_photo(photo):
         return False, "Invalid file type. Only PNG, JPG, JPEG are allowed"
 
     filename = secure_filename(photo.filename)
-    photo_path = os.path.join(UPLOAD_FOLDER, filename)
+    photo_path = os.path.join(UPLOAD_FOLDER_ELECTION, filename)
     photo.save(photo_path)
     return True,filename
 
+def upload_photo_candidate(photo):
+    """Handles photo upload validation and saving."""
+    if not photo:
+        return False, "No photo uploaded"
+
+    if not allowed_file(photo.filename):
+        return False, "Invalid file type. Only PNG, JPG, JPEG are allowed"
+
+    filename = secure_filename(photo.filename)
+    photo_path = os.path.join(UPLOAD_FOLDER_CANDIDATES, filename)
+    photo.save(photo_path)
+    return True,filename
 
 # this function give all pages the basic data
 @app.context_processor
@@ -64,7 +77,7 @@ def get_session_data():
 
 # Routes
 # Admin login page
-@app.route('/')
+@app.route('/admin/login')
 def login_page():
     return render_template("admin/admin_login.html")
 
@@ -146,7 +159,7 @@ def register_candidates():
     connection_status, admin_model = check_admin_model_connection()
     if not connection_status:
         return jsonify({"Database connection failed."})
-    flag, elections_data = admin_model.get_all_elections()
+    flag, elections_data = admin_model.get_all_elections_upcoming()
     if flag:
         return render_template("admin/candidates_register.html",
                                elections_data = elections_data)
@@ -693,7 +706,7 @@ def add_election():
         return jsonify({'success': False, 'message': 'All fields are required'}), 400
 
     # Save uploaded photo
-    flag, photo_path = upload_photo(photo)
+    flag, photo_path = upload_photo_election(photo)
     if not flag:
         return jsonify({'success': False, 'message': 'Candidate photo make error!'})
 
@@ -726,7 +739,7 @@ def update_election_details():
 
     if photo:
         # Save uploaded photo
-        flag, photo_path = upload_photo(photo)
+        flag, photo_path = upload_photo_election(photo)
         if not flag:
             return jsonify({'success': False, 'message': 'Candidate photo make error!'})
 
@@ -789,7 +802,7 @@ def add_candidate():
             return jsonify({'success': False, 'message': 'All fields are required'}), 400
 
         # Save uploaded photo
-        flag,photo_path = upload_photo(photo)
+        flag,photo_path = upload_photo_candidate(photo)
         if not flag:
             return jsonify({'success': False, 'message': 'Candidate photo make error!'})
         # Insert into DB
@@ -820,7 +833,7 @@ def update_candidate_details():
             return jsonify({'success': False, 'message': 'All fields are required'}), 400
         if photo:
             # Save uploaded photo
-            flag,photo_path = upload_photo(photo)
+            flag,photo_path = upload_photo_candidate(photo)
             if not flag:
                 return jsonify({'success': False, 'message': 'Candidate photo make error!'})
             # Insert into DB

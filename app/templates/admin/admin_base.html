@@ -18,7 +18,24 @@
     <link href="../../static/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="../../static/assets/css/app.min.css" rel="stylesheet" type="text/css" id="light-style" />
     <link href="../../static/assets/css/app-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" />
+    <script>
+        // IMMEDIATE ACTION: Correctly sets color mode on <html> tag to prevent FOUC.
+        const savedThemeMode = localStorage.getItem('themeMode');
+        const htmlEl = document.documentElement; // Targets the <html> tag
+        const lightStyle = document.getElementById('light-style');
+        const darkStyle = document.getElementById('dark-style');
 
+        if (savedThemeMode === 'dark') {
+            htmlEl.setAttribute('data-bs-theme', 'dark');
+            if (lightStyle) lightStyle.setAttribute('disabled', 'true');
+            if (darkStyle) darkStyle.removeAttribute('disabled');
+        } else {
+            htmlEl.setAttribute('data-bs-theme', 'light');
+            if (lightStyle) lightStyle.removeAttribute('disabled');
+            if (darkStyle) darkStyle.setAttribute('disabled', 'true');
+        }
+        // The rest of the settings (sidebar/width) are now handled by the improved app.min.js
+    </script>
 
     <link href="../../static/assets/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
     <link href="../../static/assets/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css" />
@@ -35,7 +52,7 @@
 </head>
 
 <body class="loading"
-    data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
+    data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":true, "showRightSidebarOnStart": true}'>
 
     <!-- Pre-loader -->
     <div id="preloader">
@@ -301,7 +318,7 @@
                             </div>
                         </form>
 
-                        
+
                     </div>
                 </div>
                 <!-- end Topbar -->
@@ -434,7 +451,8 @@
                     <button class="btn btn-primary" id="resetBtn">Reset to Default</button>
 
                     <a href="https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/"
-                        class="btn btn-warning mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase Now</a>
+                        class="btn btn-warning mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase
+                        Now</a>
                 </div>
             </div> <!-- end padding-->
 

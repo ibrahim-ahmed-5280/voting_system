@@ -9,11 +9,9 @@ function login() {
     const inputs = form.querySelectorAll('input, button');
     const idInput = document.getElementById('studentOrTeacherId')?.value.trim();
     const password = document.getElementById('password')?.value.trim();
-    const role = document.querySelector('input[name="role"]:checked')?.value;
 
     const idError = document.getElementById('studentOrTeacherId_error');
     const passError = document.getElementById('pass_error');
-    const roleError = document.getElementById('role_error');
     const button = form.querySelector('button');
     const spinner = document.getElementById('spinner');
 
@@ -24,7 +22,7 @@ function login() {
     }
 
     // Reset error messages
-    [idError, passError, roleError].forEach(err => {
+    [idError, passError].forEach(err => {
         if (err) {
             err.style.opacity = 0;
             err.innerHTML = "";
@@ -37,7 +35,7 @@ function login() {
     if (!idInput || idInput.length < 3) {
         if (idError) {
             idError.style.opacity = 1;
-            idError.innerHTML = "Please enter a valid Student or Teacher ID.";
+            idError.innerHTML = "Please enter a valid Student ID.";
         }
         hasError = true;
     }
@@ -47,15 +45,6 @@ function login() {
         if (passError) {
             passError.style.opacity = 1;
             passError.innerHTML = "Password must be at least 4 characters.";
-        }
-        hasError = true;
-    }
-
-    // --- ROLE VALIDATION ---
-    if (!role) {
-        if (roleError) {
-            roleError.style.opacity = 1;
-            roleError.innerHTML = "Please select your role.";
         }
         hasError = true;
     }
@@ -79,7 +68,7 @@ function login() {
     fetch('/student_or_teacher_login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: idInput, password, role })
+        body: JSON.stringify({ id: idInput, password })
     })
     .then(res => res.json())
     .then(data => {
@@ -87,22 +76,15 @@ function login() {
         inputs.forEach(input => input.disabled = false);
 
         if (data.success) {
-            // Redirect based on role
-            if (role === 'student') {
-                window.location.href = '/dashboard_user';
-            } else if (role === 'teacher') {
-                window.location.href = '/dashboard_user';
-            }
+            // Redirect to student dashboard
+            window.location.href = data.redirect || '/dashboard_user';
         } else {
             if (data.error === 'invalid_id' && idError) {
                 idError.style.opacity = 1;
-                idError.innerHTML = data.message || "Invalid ID.";
+                idError.innerHTML = data.message || "Invalid Student ID.";
             } else if (data.error === 'invalid_pass' && passError) {
                 passError.style.opacity = 1;
                 passError.innerHTML = data.message || "Invalid password.";
-            } else if (data.error === 'invalid_role' && roleError) {
-                roleError.style.opacity = 1;
-                roleError.innerHTML = data.message || "Invalid role selected.";
             } else {
                 alert(data.message || "Login failed. Please try again.");
             }

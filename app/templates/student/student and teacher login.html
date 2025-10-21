@@ -3,19 +3,17 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>School voting | Login</title>
+    <title>Voting -- System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-    <meta content="votingSystem" name="author" />
+    <meta content="SomaliRealEstate" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/icon.svg">
+    <link rel="shortcut icon" href="../../static/images/logo.png">
 
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/icons.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/app.min.css" rel="stylesheet"
-        type="text/css" id="light-style" />
-    <link href="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/css/app-dark.min.css"
-        rel="stylesheet" type="text/css" id="dark-style" />
+    <!-- App css -->
+    <link href="../../static/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../static/assets/css/app.min.css" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="../../static/assets/css/app-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" />
 
 </head>
 
@@ -29,9 +27,9 @@
 
                         <!-- Logo -->
                         <div class="card-header pt-4 pb-4 text-center bg-primary">
-                            <a href="index.html">
-                                <span><img src="{{url_for('static',filename = 'images/whiteLogo.svg')}}" alt=""
-                                        height="45"></span>
+                            <a href="{{url_for('dashboard_admin')}}">
+                                <span><img src="../../static/images/logo.png" alt="" class="bg-white"
+                                        style="padding: 2px 2px 4px 4px; border-radius: 70px;" height="70"></span>
                             </a>
                         </div>
 
@@ -44,15 +42,14 @@
                             </div>
 
                             <form action="#" id="signin_form">
-
-                                <!-- Student or Teacher ID -->
+                                <!-- Student ID -->
                                 <div class="mb-3">
-                                    <label for="studentOrTeacherId" class="form-label">Student or Teacher ID</label>
+                                    <label for="studentOrTeacherId" class="form-label">Student ID</label>
                                     <input class="form-control" id="studentOrTeacherId" required
-                                        placeholder="Enter your ID">
+                                        placeholder="Enter your Student ID">
                                     <span id="studentOrTeacherId_error" class="text-danger" style="opacity: 0;"></span>
                                 </div>
-                            
+
                                 <!-- Password -->
                                 <div class="mb-3">
                                     <a href="pages-recoverpw.html" class="text-muted float-end"><small>Forgot your
@@ -65,22 +62,9 @@
                                             <span class="password-eye"></span>
                                         </div>
                                     </div>
-                                    <span id="pass_error" class="text-danger" style="opacity: 0;">Invalid password</span>
+                                    <span id="pass_error" class="text-danger" style="opacity: 0;">Invalid
+                                        password</span>
                                 </div>
-                            
-                                <!-- Role Selection -->
-                                <div class="mb-3">
-                                    <label class="form-label d-block mb-2">Select Role</label>
-                                    <div class="btn-group w-100" role="group" aria-label="Role selection">
-                                        <input type="radio" class="btn-check" name="role" id="studentRole" value="student" autocomplete="off" checked>
-                                        <label class="btn btn-outline-primary" for="studentRole">Student</label>
-                            
-                                        <input type="radio" class="btn-check" name="role" id="teacherRole" value="teacher" autocomplete="off">
-                                        <label class="btn btn-outline-primary" for="teacherRole">Teacher</label>
-                                    </div>
-                                    <span id="role_error" class="text-danger" style="opacity: 0;"></span>
-                                </div>
-                            
                                 <!-- Submit -->
                                 <div class="mb-3 mb-0 text-center">
                                     <button class="btn btn-primary" type="button" onclick="login()">
@@ -89,9 +73,8 @@
                                         Log In
                                     </button>
                                 </div>
-                            
                             </form>
-                            
+
                         </div> <!-- end card-body -->
                     </div>
                     <!-- end card -->
@@ -114,16 +97,12 @@
     <!-- end page -->
 
     <footer class="footer footer-alt">
-        <div class="col-md-6">
-            <script>document.write(new Date().getFullYear())</script> © School voting system
-        </div>
+        <script>document.write(new Date().getFullYear())</script> © School voting system
     </footer>
-
-
-    <script src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/vendor.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Gaabshiine/skillup24cdn/admin_page_app/js/app.min.js"></script>
-
-    <script src="{{url_for('static', filename = 'student/js/studentAndTeacherLogin.js')}}"></script>
+    <!-- bundle -->
+    <script src="../../static/assets/js/vendor.min.js"></script>
+    <script src="../../static/assets/js/app.min.js"></script>
+    <script src="{{url_for('static', filename='student/js/studentAndTeacherLogin.js')}}"></script>
 </body>
 
 </html>

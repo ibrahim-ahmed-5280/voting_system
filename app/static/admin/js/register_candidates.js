@@ -33,11 +33,11 @@ async function candidate_registration() {
     if (nameParts.length < 3 || nameParts.length > 4) {
         nameError.classList.remove('d-none');
         nameError.innerHTML = "Full name must contain 3–4 parts.";
-        hasError = true;
+        valid = false;
     } else if (!nameParts.every(part => /^[A-Za-z]{3,15}$/.test(part))) {
         nameError.classList.remove('d-none');
         nameError.innerHTML = "Each name part must be 3–15 alphabetic characters.";
-        hasError = true;
+       valid = false;
     }
 
     if (!photo.files[0]) {

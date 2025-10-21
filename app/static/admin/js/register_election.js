@@ -59,7 +59,7 @@ function election_registration() {
     if (!photo.files[0]) {
         photoError.textContent = 'election photo is required.';
         photoError.classList.remove('d-none');
-        valid = false;
+        hasError = true;
     }
 
     if (!description.value) {

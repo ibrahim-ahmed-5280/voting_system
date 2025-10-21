@@ -577,7 +577,7 @@ class AdminModel:
             FROM votes v
             LEFT JOIN candidates c ON v.candidate_id = c.id
             LEFT JOIN election e ON v.election_id = e.id
-            LEFT JOIN students s ON v.voter_id = s.id
+            LEFT JOIN students s ON v.voter_id = s.school_id
         """
         try:
             if election_id:
@@ -723,6 +723,25 @@ class AdminModel:
             except Exception as e:
                 print(f'Error: {e}')
                 return False, f'Error {e}.'
+
+    def get_all_elections_upcoming(self):
+        sql = """
+                            SELECT * FROM election WHERE status = 'upcoming';"""
+
+        try:
+            self.cursor.execute(sql)
+            result = self.cursor.fetchall()
+            if result:
+                print('Waa la helay doorashooyinka.')
+                result = [dict(zip([key[0] for key in self.cursor.description], row)) for row in result]
+
+                return True, result
+            else:
+                print('Lama helin wax doorashooyin ah.')
+                return False, {}
+        except Exception as e:
+            print(f'Error: {e}')
+            return False, f'Error {e}.'
 
     #dashboard data
     def get_dashboard_stats(self):
@@ -882,7 +901,8 @@ class AdminModel:
                   AND status != 'completed';
             """
             self.cursor.execute(sql_update_elections)
-            self.connection.commit()  # commit the status update first (optional)
+            # Commit the status update first, as it affects the next select query
+            self.connection.commit()
 
             # 2) Get list of completed elections
             self.cursor.execute("SELECT id FROM election WHERE status = 'completed'")
@@ -891,16 +911,22 @@ class AdminModel:
                 print("No completed elections found.")
                 return True
 
+            # --- FIX: Use Parameterized Query for IN clause ---
+            # Create placeholders for the election IDs: e.g., '(%s, %s, %s)'
+            placeholders = ', '.join(['%s'] * len(completed_elections))
+
             # 3) Get vote counts for candidates but only for completed elections
-            format_ids = ",".join(str(int(x)) for x in completed_elections)
             sql_counts = f"""
                 SELECT c.election_id, c.id AS candidate_id, COUNT(v.id) AS votes
                 FROM candidates c
                 LEFT JOIN votes v ON c.id = v.candidate_id
-                WHERE c.election_id IN ({format_ids})
+                WHERE c.election_id IN ({placeholders})
                 GROUP BY c.election_id, c.id
             """
-            self.cursor.execute(sql_counts)
+            # Pass the list of IDs directly as the parameter tuple
+            self.cursor.execute(sql_counts, tuple(completed_elections))
+            # --------------------------------------------------
+
             rows = self.cursor.fetchall()
 
             # Organize into dictionary: election_id -> list of (candidate_id, votes)
@@ -912,7 +938,7 @@ class AdminModel:
             for election_id in completed_elections:
                 candidates_votes = elections.get(election_id, [])
 
-                # If there are no votes for this election, skip (no changes)
+                # If there are no candidates/votes data for this election, continue (shouldn't happen with the current SQL)
                 if not candidates_votes:
                     continue
 
@@ -922,7 +948,6 @@ class AdminModel:
 
                 # If tie (more than 1 top candidate) -> skip (no status change)
                 if len(top_candidates) != 1:
-                    # optionally log which election was skipped
                     print(
                         f"Election {election_id} has a tie for top votes ({len(top_candidates)} tied). Skipping status updates.")
                     continue
@@ -932,6 +957,7 @@ class AdminModel:
 
                 # Set winner -> 'elected' (only if not already elected/lost)
                 try:
+                    # Assuming this function still handles its own update/commit logic
                     self.change_candidate_status('elected', winner_id)
                 except Exception as e:
                     print(f"Failed to set elected for candidate {winner_id}: {e}")
@@ -941,11 +967,12 @@ class AdminModel:
                     if cid == winner_id:
                         continue
                     try:
+                        # Assuming this function still handles its own update/commit logic
                         self.change_candidate_status('lost', cid)
                     except Exception as e:
                         print(f"Failed to set lost for candidate {cid}: {e}")
 
-            # commit any changes (change_candidate_status likely commits, but safe to ensure)
+            # Final commit for any changes made inside the loop (if change_candidate_status didn't commit)
             self.connection.commit()
             print("✅ Election finalization completed successfully (ties ignored).")
             return True
